@@ -63,11 +63,13 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
 
         this._sliderChangedId = this._slider.connect('notify::value', this._onSliderChanged.bind(this))
 
-        this.connect('destroy', () => {
-            this._destroyed = true
-            this._slider.disconnect(this._sliderChangedId)
-            this._sliderChangedId = 0
-        })
+        this.connect('destroy', this._onDestroy.bind(this))
+    }
+
+    _onDestroy() {
+        this._destroyed = true
+        this._slider.disconnect(this._sliderChangedId)
+        this._sliderChangedId = 0
     }
 
     /**
@@ -225,9 +227,19 @@ class DisplaysToggle extends QuickMenuToggle {
             this)
 
         this.connect('clicked', () => this.menu.toggle())
-        this.connect('destroy', () => (this._destroyed = true))
+        this.connect('destroy', this._onDestroy.bind(this))
 
         this.visible = false
+    }
+
+    // The shell does not destroy the menu of a quick toggle along with it
+    _onDestroy() {
+        this._destroyed = true
+
+        this._section.destroy()
+        this._section = null
+
+        this.menu.destroy()
     }
 
     setDisplays(displays) {
