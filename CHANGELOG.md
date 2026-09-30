@@ -8,6 +8,15 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## 1.2.0 (2026-09-30)
+
+### Changed
+
+* Brightness sliders stop at 1 instead of 0. Some displays turn the backlight off at brightness 0,
+  which leaves the screen black with no way to see the slider that would bring it back
+  ([#2](https://github.com/samuelcecilio/multi-display-adjustment/issues/2)). A display already at 0
+  is shown as it is, and is only written to once the slider moves. Contrast still goes down to 0.
+
 ## 1.1.1 (2026-09-16)
 
 ### Changed
