@@ -4,7 +4,8 @@ Offers sliders to control external displays' brightness and contrast through DDC
 
 A single _Displays_ entry in Quick Settings opens a menu where every connected display has its own
 brightness and contrast sliders, under the display name that Settings shows. Each slider shows the
-level as a number from 0 to 100.
+level as a number from 0 to 100. Brightness stops at 1, since some displays turn the backlight off at
+0 and leave no way to see the slider again.
 
 The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app) opens preferences:
 
