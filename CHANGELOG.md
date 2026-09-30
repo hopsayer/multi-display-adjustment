@@ -8,6 +8,23 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## 1.2.1 (2026-09-30)
+
+### Changed
+
+* The package credits the original author. Every source file carries a copyright and license
+  header, and the description says the extension is a fork of Display Adjustment.
+* Code the extension never called is gone, among it the sleep multiplier methods of the
+  ddcutil-service interface. The style is consistent across files and comments are shorter.
+
+### Fixed
+
+* Locking the screen right after login could leave the `MonitorsChanged` handler connected to a
+  proxy of the previous session, which then failed on the next display change.
+* Without ddcutil-service, the notification about it came back on every display change. It now
+  shows once, and startup errors are logged instead of left as unhandled promise rejections.
+* `make check` fails when `gjs` is missing, instead of reporting that there are no syntax errors.
+
 ## 1.2.0 (2026-09-30)
 
 ### Changed
