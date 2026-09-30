@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Maciej Wójcik and the display-adjustment contributors
+// SPDX-FileCopyrightText: 2026 Samuel Cecilio
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 import Clutter from 'gi://Clutter'
 import Gio from 'gi://Gio'
 import GObject from 'gi://GObject'
@@ -16,23 +20,16 @@ import { devLog } from './code-convenience.js'
 const BRIGHTNESS_VCP_CODE = 0x10
 const CONTRAST_VCP_CODE = 0x12
 
-/**
- * Some displays turn the backlight off at brightness 0, which leaves the screen
- * black with no way to see the slider that would bring it back.
- */
+// Some displays turn the backlight off at 0, leaving no way to see the slider
 const MIN_BRIGHTNESS = 0.01
 
 /**
- * A slider bound to one VCP feature on one or more displays, laid out as a menu
- * item so that several of them fit in one dropdown. The shell uses the same
- * shape for the keyboard backlight in `status/backlight.js`.
+ * A slider bound to one VCP feature on one or more displays.
  *
  * DDC/CI writes are slow. One write is kept in flight per display; later values
  * from a drag replace the pending one so the last position always arrives.
  *
  * `minValue` is the lowest fraction of the range the slider can be moved to.
- * A display that already sits below it is shown as it is, and only written to
- * once the slider moves.
  */
 const VcpSliderItem = GObject.registerClass(
 class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
@@ -123,10 +120,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     _onSliderChanged() {
-        /**
-         * Setting the value notifies again, and that second call does the
-         * write.
-         */
+        // Setting the value notifies again, and that call does the write
         if (this._slider.value < this._minValue) {
             this._slider.value = this._minValue
 
@@ -135,10 +129,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
 
         this._updateLabel()
 
-        /**
-         * On a display with a short range the minimum fraction can round down
-         * to 0, which is what it is there to avoid.
-         */
+        // On a short range the minimum fraction can round down to 0
         const minimum = this._minValue > 0 ? 1 : 0
 
         for (const target of this._targets) {
@@ -171,10 +162,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
         target.writing = false
     }
 
-    /**
-     * Menu items consume left and right arrows for navigation, which are the
-     * keys expected to move a slider.
-     */
+    // Menu items would otherwise take Left and Right for navigation
     vfunc_key_press_event(event) {
         const key = event.get_key_symbol()
 
@@ -187,16 +175,14 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
 })
 
 /**
- * One Quick Settings tile holding every display, instead of a pair of unlabelled
- * sliders per display. Sliders in the grid have no room for a title, so with more
- * than one display there is no way to tell which slider belongs to which screen.
+ * One Quick Settings tile with a menu that holds the sliders of every display,
+ * each under the display's name.
  */
 const DisplaysToggle = GObject.registerClass(
 class DisplaysToggle extends QuickMenuToggle {
     /**
-     * `iconsDirectory` is the extension's own `icons`. Adwaita has no contrast
-     * icon since GNOME 47 trimmed its legacy set, so the extension ships one.
-     * The `-symbolic.svg` suffix is what makes the shell recolour it.
+     * `iconsDirectory` holds a contrast icon, which Adwaita no longer has
+     * since GNOME 47.
      */
     _init(ddcutilService, iconsDirectory, settings, openPreferences) {
         super._init({
@@ -204,11 +190,7 @@ class DisplaysToggle extends QuickMenuToggle {
             iconName: 'display-brightness-symbolic'
         })
 
-        /**
-         * The property only exists since GNOME 49, and passing an unknown
-         * property to _init fails construction on older shells. Those fall
-         * back to the shell's built-in "Open menu" label.
-         */
+        // Only exists since GNOME 49, older shells fail on it in _init()
         if ('menuButtonAccessibleName' in this) {
             this.menuButtonAccessibleName = _('Open display adjustments menu')
         }
@@ -223,10 +205,7 @@ class DisplaysToggle extends QuickMenuToggle {
             file: iconsDirectory.get_child('contrast-symbolic.svg')
         })
 
-        /**
-         * Values are read from the displays asynchronously and a display can be
-         * unplugged meanwhile. Replies of a previous layout are discarded.
-         */
+        // Discards replies that arrive after the menu was rebuilt
         this._generation = 0
 
         this.menu.setHeader('display-brightness-symbolic', _('Displays'))
@@ -283,10 +262,7 @@ class DisplaysToggle extends QuickMenuToggle {
     _addDisplay(display, showContrast, generation) {
         const heading = new PopupMenu.PopupSeparatorMenuItem(display.name)
 
-        /**
-         * The connector disambiguates two displays of the same model, which
-         * share the name Mutter reports.
-         */
+        // Tells apart two displays of the same model, which share a name
         heading.add_child(new St.Label({
             text: display.connector,
             style_class: 'popup-menu-item-connector',
@@ -351,7 +327,7 @@ class DisplaysToggle extends QuickMenuToggle {
         }
 
         if (!hasBrightness && !hasContrast) {
-            devLog("[multi-display-adjustment] No adjustable features on display", label)
+            devLog('[multi-display-adjustment] No adjustable features on display', label)
 
             heading.hide()
         }

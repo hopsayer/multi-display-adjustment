@@ -92,6 +92,7 @@ status:
 # Modules are only parsed, since the shell imports they pull in do not resolve
 # outside of a shell process. That is enough to catch a syntax error.
 check:
+	@command -v gjs >/dev/null || { echo "gjs not found, nothing was checked" >&2; exit 1; }
 	@status=0; \
 	for file in $(JS_SOURCES); do \
 	    errors="$$(gjs -m $$file 2>&1 | grep -F 'SyntaxError' || true)"; \
