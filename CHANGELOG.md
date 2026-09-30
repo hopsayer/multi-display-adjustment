@@ -8,6 +8,16 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## 1.2.2 (2026-09-30)
+
+### Fixed
+
+* Disabling the extension left the menu of the Displays tile behind, with its sliders, because the
+  shell does not destroy the menu of a quick toggle along with the toggle. Every lock and unlock of
+  the screen added one more hidden menu. The menu is now destroyed with the tile.
+* Cleanup runs in named `destroy` handlers, which the extensions.gnome.org linter (EGO-L-002,
+  EGO-L-003, EGO-L-005) recognizes.
+
 ## 1.2.1 (2026-09-30)
 
 ### Changed
