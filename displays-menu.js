@@ -17,21 +17,32 @@ const BRIGHTNESS_VCP_CODE = 0x10
 const CONTRAST_VCP_CODE = 0x12
 
 /**
+ * Some displays turn the backlight off at brightness 0, which leaves the screen
+ * black with no way to see the slider that would bring it back.
+ */
+const MIN_BRIGHTNESS = 0.01
+
+/**
  * A slider bound to one VCP feature on one or more displays, laid out as a menu
  * item so that several of them fit in one dropdown. The shell uses the same
  * shape for the keyboard backlight in `status/backlight.js`.
  *
  * DDC/CI writes are slow. One write is kept in flight per display; later values
  * from a drag replace the pending one so the last position always arrives.
+ *
+ * `minValue` is the lowest fraction of the range the slider can be moved to.
+ * A display that already sits below it is shown as it is, and only written to
+ * once the slider moves.
  */
 const VcpSliderItem = GObject.registerClass(
 class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
-    _init(ddcutilService, displayIds, vcpCode, gicon, accessibleName) {
+    _init(ddcutilService, displayIds, vcpCode, gicon, accessibleName, minValue = 0) {
         super._init({ activate: false })
 
         this._ddcutilService = ddcutilService
         this._displayIds = displayIds
         this._vcpCode = vcpCode
+        this._minValue = minValue
         this._targets = []
         this._destroyed = false
 
@@ -112,10 +123,26 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     _onSliderChanged() {
+        /**
+         * Setting the value notifies again, and that second call does the
+         * write.
+         */
+        if (this._slider.value < this._minValue) {
+            this._slider.value = this._minValue
+
+            return
+        }
+
         this._updateLabel()
 
+        /**
+         * On a display with a short range the minimum fraction can round down
+         * to 0, which is what it is there to avoid.
+         */
+        const minimum = this._minValue > 0 ? 1 : 0
+
         for (const target of this._targets) {
-            this._queueWrite(target, Math.round(this._slider.value * target.max))
+            this._queueWrite(target, Math.max(Math.round(this._slider.value * target.max), minimum))
         }
     }
 
@@ -271,7 +298,8 @@ class DisplaysToggle extends QuickMenuToggle {
 
         const brightness = new VcpSliderItem(
             this._ddcutilService, [display.displayId], BRIGHTNESS_VCP_CODE,
-            this._brightnessIcon, _('Brightness of %s').format(display.name)
+            this._brightnessIcon, _('Brightness of %s').format(display.name),
+            MIN_BRIGHTNESS
         )
         this._section.addMenuItem(brightness)
 
@@ -296,7 +324,8 @@ class DisplaysToggle extends QuickMenuToggle {
 
         const brightness = new VcpSliderItem(
             this._ddcutilService, displayIds, BRIGHTNESS_VCP_CODE,
-            this._brightnessIcon, _('Brightness of all displays')
+            this._brightnessIcon, _('Brightness of all displays'),
+            MIN_BRIGHTNESS
         )
         this._section.addMenuItem(brightness)
 
