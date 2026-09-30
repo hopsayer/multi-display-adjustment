@@ -1,3 +1,10 @@
+// SPDX-FileCopyrightText: Maciej Wójcik and the display-adjustment contributors
+// SPDX-FileCopyrightText: 2026 Samuel Cecilio
+// SPDX-License-Identifier: GPL-2.0-or-later
+//
+// A fork of Display Adjustment by Maciej Wójcik,
+// https://gitlab.com/w8jcik/display-adjustment
+
 import GObject from 'gi://GObject'
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
@@ -18,39 +25,7 @@ class DisplaysAdjustmentsIndicator extends SystemIndicator {
 })
 
 export default class DisplaysAdjustmentsExtension extends Extension {
-    async _syncDisplays() {
-        /**
-         * The extension can be disabled while these calls are in flight, for
-         * example by the screen locking, which nulls the fields of this class.
-         */
-        const displayConfigService = this._displayConfigService
-        const ddcutilService = this._ddcutilService
-
-        const mutterDisplays = await displayConfigService.getDisplays()
-        const ddcDisplays = await ddcutilService.getDisplays()
-
-        if (this._toggle === null) {
-            return
-        }
-
-        const displays = pairDisplays(mutterDisplays, ddcDisplays)
-
-        const signature = displays.map(display => `${display.key}#${display.displayId}#${display.name}#${display.connector}`)
-
-        devLog("[multi-display-adjustment] previous displays", this._previousSignature, "displays", signature)
-
-        if (areArraysEqual(signature, this._previousSignature)) {
-            return
-        }
-
-        this._previousSignature = signature
-
-        this._toggle.setDisplays(displays)
-    }
-
-    async enable() {
-        devLog("[multi-display-adjustment] Starting extension...")
-
+    enable() {
         this._previousSignature = null
 
         this._displayConfigService = new DisplayConfigService()
@@ -65,34 +40,60 @@ export default class DisplaysAdjustmentsExtension extends Extension {
 
         Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator)
 
+        this._connectServices().catch(error => logError(error, '[multi-display-adjustment] Could not start'))
+    }
+
+    /**
+     * disable() can run while this is waiting, for example when the screen
+     * locks right after login, so every step after an await checks that the
+     * services it holds are still the current ones.
+     */
+    async _connectServices() {
         const displayConfigService = this._displayConfigService
         const ddcutilService = this._ddcutilService
 
         await displayConfigService.init()
-        await ddcutilService._init()
+        await ddcutilService.init()
 
-        /**
-         * disable can run while the proxies are being set up, for example when
-         * the screen locks right after login. Nothing may be connected then.
-         */
-        if (this._toggle === null) {
+        if (this._displayConfigService !== displayConfigService) {
             return
         }
 
-        this._monitorsChangedSignalHandle = displayConfigService._proxy.connectSignal('MonitorsChanged', (proxy, nameOwner, args) => {
-            this._syncDisplays()
+        displayConfigService.connectMonitorsChanged(() => {
+            this._syncDisplays().catch(error => logError(error, '[multi-display-adjustment] Could not list displays'))
         })
 
         await this._syncDisplays()
+    }
 
-        devLog("[multi-display-adjustment] Done starting extension")
+    async _syncDisplays() {
+        const displayConfigService = this._displayConfigService
+        const ddcutilService = this._ddcutilService
+
+        const mutterDisplays = await displayConfigService.getDisplays()
+        const ddcDisplays = await ddcutilService.getDisplays()
+
+        if (this._displayConfigService !== displayConfigService) {
+            return
+        }
+
+        const displays = pairDisplays(mutterDisplays, ddcDisplays)
+
+        const signature = displays.map(display => `${display.key}#${display.displayId}#${display.name}#${display.connector}`)
+
+        devLog('[multi-display-adjustment] previous displays', this._previousSignature, 'displays', signature)
+
+        if (areArraysEqual(signature, this._previousSignature)) {
+            return
+        }
+
+        this._previousSignature = signature
+
+        this._toggle.setDisplays(displays)
     }
 
     disable() {
-        if (this._monitorsChangedSignalHandle) {
-            this._displayConfigService._proxy.disconnectSignal(this._monitorsChangedSignalHandle)
-            this._monitorsChangedSignalHandle = null
-        }
+        this._displayConfigService.disconnectMonitorsChanged()
 
         this._indicator.quickSettingsItems.forEach(item => item.destroy())
         this._indicator.quickSettingsItems = []

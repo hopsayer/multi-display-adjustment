@@ -1,21 +1,21 @@
-function getPossibleBoolean(variable, _property) {
-    if (_property in variable) {
-        return variable[_property].get_boolean()
+// SPDX-FileCopyrightText: Maciej Wójcik and the display-adjustment contributors
+// SPDX-FileCopyrightText: 2026 Samuel Cecilio
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+function getPossibleBoolean(variant, property) {
+    if (property in variant) {
+        return variant[property].get_boolean()
     }
 
     return false
 }
 
-function getPossibleString(variable, _property) {
-    if (_property in variable) {
-        return variable[_property].get_string()[0]
+function getPossibleString(variant, property) {
+    if (property in variant) {
+        return variant[property].get_string()[0]
     }
 
     return null
-}
-
-function startsWith(text, beginning) {
-    return text.substr(0, beginning.length) == beginning
 }
 
 function devLog(...args) {
@@ -24,11 +24,7 @@ function devLog(...args) {
 }
 
 function areArraysEqual(array, otherArray) {
-    return JSON.stringify(array) == JSON.stringify(otherArray)
+    return JSON.stringify(array) === JSON.stringify(otherArray)
 }
 
-function setIntersection(set, otherSet) {
-    return new Set([...set].filter(item => otherSet.has(item)))
-}
-
-export { areArraysEqual, devLog, getPossibleBoolean, getPossibleString, setIntersection, startsWith }
+export { areArraysEqual, devLog, getPossibleBoolean, getPossibleString }

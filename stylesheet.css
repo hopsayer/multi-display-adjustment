@@ -1,3 +1,7 @@
+/* SPDX-FileCopyrightText: Maciej Wójcik and the display-adjustment contributors */
+/* SPDX-FileCopyrightText: 2026 Samuel Cecilio */
+/* SPDX-License-Identifier: GPL-2.0-or-later */
+
 .mda-slider-value {
     min-width: 2.2em;
     text-align: right;
