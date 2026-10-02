@@ -6,8 +6,12 @@ INSTALL_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 JS_SOURCES = $(wildcard *.js)
 SCHEMAS_DIR = schemas
 SCHEMAS_COMPILED = $(SCHEMAS_DIR)/gschemas.compiled
+PACKAGE = dist/$(UUID).shell-extension.zip
 
-.PHONY: help pack install link unlink uninstall enable disable status check nested logs schemas
+# tree-sitter 0.26 makes shexli 0.2.1 crash with a segmentation fault
+SHEXLI ?= uvx --with 'tree-sitter<0.26' shexli
+
+.PHONY: help pack install link unlink uninstall enable disable status check lint nested logs schemas
 
 help:
 	@echo "Getting the extension into the shell (pick one)"
@@ -23,6 +27,7 @@ help:
 	@echo ""
 	@echo "  make pack       only build dist/$(UUID).shell-extension.zip"
 	@echo "  make check      look for syntax errors in the sources"
+	@echo "  make lint       run the extensions.gnome.org analyzer on the package"
 	@echo "  make nested     start a throwaway shell to catch startup errors"
 	@echo "  make schemas    compile GSettings schemas for a symlink install"
 	@echo "  make logs       follow the shell log"
@@ -100,6 +105,14 @@ check:
 	done; \
 	if [ $$status -eq 0 ]; then echo "No syntax errors in $(words $(JS_SOURCES)) files"; fi; \
 	exit $$status
+
+# Shexli is what extensions.gnome.org runs on an uploaded package. It exits
+# with 0 even when it reports findings, so its summary line is checked.
+lint: pack
+	@command -v $(firstword $(SHEXLI)) >/dev/null || { echo "$(firstword $(SHEXLI)) not found, see dev.md" >&2; exit 1; }
+	@output="$$($(SHEXLI) $(PACKAGE))" || { echo "$$output"; exit 1; }; \
+	echo "$$output"; \
+	echo "$$output" | grep -q '^shexli: clean'
 
 # The displays of this session are virtual and have no DDC/CI, so no sliders
 # show up in it. It is for seeing whether the extension starts without errors.

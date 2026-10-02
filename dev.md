@@ -83,6 +83,27 @@ It runs GNOME Shell headless, because GNOME Shell 50 dropped both `--nested` and
 `make nested` compiles the GSettings schema first, because `getSettings()` throws if
 `schemas/gschemas.compiled` is missing.
 
+## Lint
+
+```bash
+make lint
+```
+
+builds the package and runs [Shexli](https://pypi.org/project/shexli/) on it, the analyzer behind
+the warnings on the extensions.gnome.org review page. It fails unless Shexli reports the package as
+clean.
+
+Shexli runs through `uvx`, so it needs [uv](https://docs.astral.sh/uv/) and no Python setup. With
+mise:
+
+```bash
+mise use -g uv
+```
+
+Another way of running Shexli goes in `SHEXLI`, for example `make lint SHEXLI=shexli` for one
+installed with `uv tool install shexli`. The default pins `tree-sitter` below 0.26, which makes
+Shexli 0.2.1 crash.
+
 ## Dbus examples
 
 This extension is using a Mutter interface called `DisplayConfig`
