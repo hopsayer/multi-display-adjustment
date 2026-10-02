@@ -366,7 +366,7 @@ class DisplaysToggle extends QuickMenuToggle {
             hasBrightness = await brightness.fetchValue()
             hasContrast = contrast ? await contrast.fetchValue() : false
         } catch (error) {
-            if (!error.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+            if (!error.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
                 logError(error, '[multi-display-adjustment] Could not read display values')
             }
 

@@ -140,7 +140,7 @@ class DdcutilService {
         try {
             result = await this._proxy.GetVcpAsync(displayId, '', vcpCode, 0, cancellable)
         } catch (exception) {
-            if (exception.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+            if (exception.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
                 throw exception
             }
 

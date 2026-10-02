@@ -15,6 +15,13 @@ repository — use `git log` and `git blame` for per-line authorship.
 * Moving a slider shows the level in the on-screen display of the displays it adjusts, as GNOME does
   for the brightness of a built-in display.
 
+## 1.2.4 (2026-10-02)
+
+### Changed
+
+* The cancellation checks call `matches()` directly instead of through optional chaining, as the
+  extensions.gnome.org review asked. Only a `GLib.Error` reaches them.
+
 ## 1.2.3 (2026-10-02)
 
 ### Changed
