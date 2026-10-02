@@ -24,7 +24,38 @@ const CONTRAST_VCP_CODE = 0x12
 const MIN_BRIGHTNESS = 0.01
 
 /**
- * A slider bound to one VCP feature on one or more displays.
+ * Shows `level` in the on-screen display of the monitors behind `connectors`,
+ * like GNOME does for the built-in display. GNOME 49 shows it on any set of
+ * monitors, before that it is either one monitor or all of them.
+ */
+function showOsd(connectors, icon, level) {
+    const monitorManager = global.backend.get_monitor_manager()
+    const monitorIndexes = connectors
+        .map(connector => monitorManager.get_monitor_for_connector(connector))
+        .filter(monitorIndex => monitorIndex !== -1)
+
+    if (monitorIndexes.length === 0) {
+        return
+    }
+
+    if ('showOne' in Main.osdWindowManager) {
+        const levels = {}
+
+        for (const monitorIndex of monitorIndexes) {
+            levels[monitorIndex] = { level, maxLevel: 1 }
+        }
+
+        Main.osdWindowManager.show(icon, null, levels)
+    } else {
+        const monitorIndex = monitorIndexes.length === 1 ? monitorIndexes[0] : -1
+
+        Main.osdWindowManager.show(monitorIndex, icon, null, level, 1)
+    }
+}
+
+/**
+ * A slider bound to one VCP feature on one or more displays. Moving it shows
+ * the level on those displays.
  *
  * DDC/CI writes are slow. One write is kept in flight per display; later values
  * from a drag replace the pending one so the last position always arrives.
@@ -33,11 +64,12 @@ const MIN_BRIGHTNESS = 0.01
  */
 const VcpSliderItem = GObject.registerClass(
 class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
-    _init(ddcutilService, displayIds, vcpCode, gicon, accessibleName, minValue = 0) {
+    _init(ddcutilService, displays, vcpCode, gicon, accessibleName, minValue = 0) {
         super._init({ activate: false })
 
         this._ddcutilService = ddcutilService
-        this._displayIds = displayIds
+        this._displays = displays
+        this._gicon = gicon
         this._vcpCode = vcpCode
         this._minValue = minValue
         this._targets = []
@@ -81,7 +113,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
      */
     async fetchValue() {
         const values = await Promise.all(
-            this._displayIds.map(id => this._ddcutilService.getVcp(id, this._vcpCode, this._cancellable)))
+            this._displays.map(display => this._ddcutilService.getVcp(display.displayId, this._vcpCode, this._cancellable)))
 
         this._targets = []
         const fractions = []
@@ -89,7 +121,8 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
         values.forEach((value, i) => {
             if (value !== null && value.max) {
                 this._targets.push({
-                    displayId: this._displayIds[i],
+                    displayId: this._displays[i].displayId,
+                    connector: this._displays[i].connector,
                     max: value.max,
                     lastWritten: value.current,
                     pending: null,
@@ -129,6 +162,8 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
         }
 
         this._updateLabel()
+
+        showOsd(this._targets.map(target => target.connector), this._gicon, this._slider.value)
 
         // On a short range the minimum fraction can round down to 0
         const minimum = this._minValue > 0 ? 1 : 0
@@ -277,7 +312,7 @@ class DisplaysToggle extends QuickMenuToggle {
         this._section.addMenuItem(heading)
 
         const brightness = new VcpSliderItem(
-            this._ddcutilService, [display.displayId], BRIGHTNESS_VCP_CODE,
+            this._ddcutilService, [display], BRIGHTNESS_VCP_CODE,
             this._brightnessIcon, _('Brightness of %s').format(display.name),
             MIN_BRIGHTNESS
         )
@@ -287,7 +322,7 @@ class DisplaysToggle extends QuickMenuToggle {
 
         if (showContrast) {
             contrast = new VcpSliderItem(
-                this._ddcutilService, [display.displayId], CONTRAST_VCP_CODE,
+                this._ddcutilService, [display], CONTRAST_VCP_CODE,
                 this._contrastIcon, _('Contrast of %s').format(display.name)
             )
             this._section.addMenuItem(contrast)
@@ -300,10 +335,8 @@ class DisplaysToggle extends QuickMenuToggle {
         const heading = new PopupMenu.PopupSeparatorMenuItem(_('All displays'))
         this._section.addMenuItem(heading)
 
-        const displayIds = displays.map(display => display.displayId)
-
         const brightness = new VcpSliderItem(
-            this._ddcutilService, displayIds, BRIGHTNESS_VCP_CODE,
+            this._ddcutilService, displays, BRIGHTNESS_VCP_CODE,
             this._brightnessIcon, _('Brightness of all displays'),
             MIN_BRIGHTNESS
         )
@@ -313,7 +346,7 @@ class DisplaysToggle extends QuickMenuToggle {
 
         if (showContrast) {
             contrast = new VcpSliderItem(
-                this._ddcutilService, displayIds, CONTRAST_VCP_CODE,
+                this._ddcutilService, displays, CONTRAST_VCP_CODE,
                 this._contrastIcon, _('Contrast of all displays')
             )
             this._section.addMenuItem(contrast)
