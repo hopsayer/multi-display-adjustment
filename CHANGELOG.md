@@ -8,6 +8,14 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## Unreleased
+
+### Changed
+
+* Reads of slider values still in flight are cancelled with a `Gio.Cancellable` when the slider is
+  destroyed, in place of the `_destroyed` and `_generation` guards the extensions.gnome.org review
+  asked to remove.
+
 ## 1.2.2 (2026-09-30)
 
 ### Fixed

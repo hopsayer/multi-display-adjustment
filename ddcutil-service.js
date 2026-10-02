@@ -131,14 +131,19 @@ class DdcutilService {
 
     /**
      * Returns null when the display does not support the feature or when the
-     * service cannot be reached, so that the control can be left out.
+     * service cannot be reached, so that the control can be left out. Rejects
+     * when `cancellable` is cancelled.
      */
-    async getVcp(displayId, vcpCode) {
+    async getVcp(displayId, vcpCode, cancellable) {
         let result
 
         try {
-            result = await this._proxy.GetVcpAsync(displayId, '', vcpCode, 0)
+            result = await this._proxy.GetVcpAsync(displayId, '', vcpCode, 0, cancellable)
         } catch (exception) {
+            if (exception.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                throw exception
+            }
+
             devLog(`[multi-display-adjustment] Reading VCP ${vcpCode} of display ${displayId} failed`, exception.message)
 
             return null

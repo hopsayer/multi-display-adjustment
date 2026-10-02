@@ -41,7 +41,9 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
         this._vcpCode = vcpCode
         this._minValue = minValue
         this._targets = []
-        this._destroyed = false
+
+        // Cancels the reads still in flight when the item is destroyed
+        this._cancellable = new Gio.Cancellable()
 
         this.add_child(new St.Icon({
             gicon,
@@ -67,22 +69,19 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     _onDestroy() {
-        this._destroyed = true
+        this._cancellable.cancel()
         this._slider.disconnect(this._sliderChangedId)
         this._sliderChangedId = 0
     }
 
     /**
      * Reads the current value from every display. Returns false when none of
-     * them support the feature, in which case the item stays hidden.
+     * them support the feature, in which case the item stays hidden. Rejects
+     * with Gio.IOErrorEnum.CANCELLED when the item is destroyed meanwhile.
      */
     async fetchValue() {
         const values = await Promise.all(
-            this._displayIds.map(id => this._ddcutilService.getVcp(id, this._vcpCode)))
-
-        if (this._destroyed) {
-            return false
-        }
+            this._displayIds.map(id => this._ddcutilService.getVcp(id, this._vcpCode, this._cancellable)))
 
         this._targets = []
         const fractions = []
@@ -200,15 +199,11 @@ class DisplaysToggle extends QuickMenuToggle {
         this._ddcutilService = ddcutilService
         this._settings = settings
         this._displays = []
-        this._destroyed = false
 
         this._brightnessIcon = new Gio.ThemedIcon({ name: 'display-brightness-symbolic' })
         this._contrastIcon = new Gio.FileIcon({
             file: iconsDirectory.get_child('contrast-symbolic.svg')
         })
-
-        // Discards replies that arrive after the menu was rebuilt
-        this._generation = 0
 
         this.menu.setHeader('display-brightness-symbolic', _('Displays'))
 
@@ -234,8 +229,6 @@ class DisplaysToggle extends QuickMenuToggle {
 
     // The shell does not destroy the menu of a quick toggle along with it
     _onDestroy() {
-        this._destroyed = true
-
         this._section.destroy()
         this._section = null
 
@@ -248,17 +241,16 @@ class DisplaysToggle extends QuickMenuToggle {
     }
 
     _rebuild() {
-        this._generation++
         this._section.removeAll()
 
         const showContrast = this._settings.get_boolean('show-contrast')
         const grouped = this._settings.get_boolean('group-displays') && this._displays.length >= 2
 
         if (grouped) {
-            this._addGroup(this._displays, showContrast, this._generation)
+            this._addGroup(this._displays, showContrast)
         } else {
             for (const display of this._displays) {
-                this._addDisplay(display, showContrast, this._generation)
+                this._addDisplay(display, showContrast)
             }
         }
 
@@ -271,7 +263,7 @@ class DisplaysToggle extends QuickMenuToggle {
         }
     }
 
-    _addDisplay(display, showContrast, generation) {
+    _addDisplay(display, showContrast) {
         const heading = new PopupMenu.PopupSeparatorMenuItem(display.name)
 
         // Tells apart two displays of the same model, which share a name
@@ -301,10 +293,10 @@ class DisplaysToggle extends QuickMenuToggle {
             this._section.addMenuItem(contrast)
         }
 
-        this._fetchValues(display.name, heading, brightness, contrast, generation)
+        this._fetchValues(display.name, heading, brightness, contrast)
     }
 
-    _addGroup(displays, showContrast, generation) {
+    _addGroup(displays, showContrast) {
         const heading = new PopupMenu.PopupSeparatorMenuItem(_('All displays'))
         this._section.addMenuItem(heading)
 
@@ -327,14 +319,24 @@ class DisplaysToggle extends QuickMenuToggle {
             this._section.addMenuItem(contrast)
         }
 
-        this._fetchValues(_('All displays'), heading, brightness, contrast, generation)
+        this._fetchValues(_('All displays'), heading, brightness, contrast)
     }
 
-    async _fetchValues(label, heading, brightness, contrast, generation) {
-        const hasBrightness = await brightness.fetchValue()
-        const hasContrast = contrast ? await contrast.fetchValue() : false
+    /**
+     * The heading and its sliders are destroyed together, when the menu is
+     * rebuilt or the tile goes away, which cancels the reads.
+     */
+    async _fetchValues(label, heading, brightness, contrast) {
+        let hasBrightness, hasContrast
 
-        if (this._destroyed || generation !== this._generation) {
+        try {
+            hasBrightness = await brightness.fetchValue()
+            hasContrast = contrast ? await contrast.fetchValue() : false
+        } catch (error) {
+            if (!error.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
+                logError(error, '[multi-display-adjustment] Could not read display values')
+            }
+
             return
         }
 
