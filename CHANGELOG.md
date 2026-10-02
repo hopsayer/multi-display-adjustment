@@ -8,6 +8,13 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## 1.2.4 (2026-10-02)
+
+### Changed
+
+* The cancellation checks call `matches()` directly instead of through optional chaining, as the
+  extensions.gnome.org review asked. Only a `GLib.Error` reaches them.
+
 ## 1.2.3 (2026-10-02)
 
 ### Changed

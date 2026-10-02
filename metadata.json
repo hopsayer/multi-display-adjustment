@@ -5,5 +5,5 @@
   "url": "https://github.com/samuelcecilio/multi-display-adjustment",
   "shell-version": [ "46", "47", "48", "49", "50" ],
   "settings-schema": "org.gnome.shell.extensions.multi-display-adjustment",
-  "version-name": "1.2.3"
+  "version-name": "1.2.4"
 }
