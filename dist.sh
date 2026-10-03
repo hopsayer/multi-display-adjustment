@@ -28,6 +28,7 @@ EXTRA_SOURCES=(
     display-pairing.js
     displays-menu.js
     icons
+    inline-support.js
     vcp-controller.js
 )
 
