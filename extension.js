@@ -24,6 +24,34 @@ class DisplaysAdjustmentsIndicator extends SystemIndicator {
 
 })
 
+/**
+ * The sliders in a Quick Settings tile with a menu. A view has `setDisplays()`
+ * to show the given displays and `destroy()` to take itself out of the shell.
+ */
+class TileView {
+    constructor(ddcutilService, iconsDirectory, settings, openPreferences) {
+        this._indicator = new DisplaysAdjustmentsIndicator()
+        this._toggle = new DisplaysToggle(ddcutilService, iconsDirectory, settings, openPreferences)
+
+        this._indicator.quickSettingsItems.push(this._toggle)
+
+        Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator)
+    }
+
+    setDisplays(displays) {
+        this._toggle.setDisplays(displays)
+    }
+
+    destroy() {
+        this._indicator.quickSettingsItems.forEach(item => item.destroy())
+        this._indicator.quickSettingsItems = []
+        this._toggle = null
+
+        this._indicator.destroy()
+        this._indicator = null
+    }
+}
+
 export default class DisplaysAdjustmentsExtension extends Extension {
     enable() {
         this._previousSignature = null
@@ -31,14 +59,9 @@ export default class DisplaysAdjustmentsExtension extends Extension {
         this._displayConfigService = new DisplayConfigService()
         this._ddcutilService = new DdcutilService()
 
-        this._indicator = new DisplaysAdjustmentsIndicator()
-        this._toggle = new DisplaysToggle(
+        this._view = new TileView(
             this._ddcutilService, this.dir.get_child('icons'),
             this.getSettings(), () => this.openPreferences())
-
-        this._indicator.quickSettingsItems.push(this._toggle)
-
-        Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator)
 
         this._connectServices().catch(error => logError(error, '[multi-display-adjustment] Could not start'))
     }
@@ -89,18 +112,14 @@ export default class DisplaysAdjustmentsExtension extends Extension {
 
         this._previousSignature = signature
 
-        this._toggle.setDisplays(displays)
+        this._view.setDisplays(displays)
     }
 
     disable() {
         this._displayConfigService.disconnectMonitorsChanged()
 
-        this._indicator.quickSettingsItems.forEach(item => item.destroy())
-        this._indicator.quickSettingsItems = []
-        this._toggle = null
-
-        this._indicator.destroy()
-        this._indicator = null
+        this._view.destroy()
+        this._view = null
 
         this._displayConfigService = null
         this._ddcutilService = null
