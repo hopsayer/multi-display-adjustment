@@ -28,6 +28,7 @@ EXTRA_SOURCES=(
     display-pairing.js
     displays-menu.js
     icons
+    vcp-controller.js
 )
 
 extra_source_arguments=()
