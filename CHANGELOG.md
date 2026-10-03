@@ -10,6 +10,12 @@ repository — use `git log` and `git blame` for per-line authorship.
 
 ## Unreleased
 
+### Added
+
+* A _Placement_ setting. Besides the tile, the brightness sliders can sit right below the brightness
+  slider of GNOME, like its own sliders, with no tile and no extra menu level. It is offered on GNOME
+  50 only, the version it was checked on, and the tile is used on any other.
+
 ### Changed
 
 * Reading and writing a display's brightness or contrast moved out of the menu item that shows the

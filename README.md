@@ -13,6 +13,11 @@ The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app
   percentage on every display. Until the slider is moved, it shows the average of the current
   levels; it does not write to the displays just by turning the option on.
 * **Show contrast sliders** — turn this off to keep only brightness.
+* **Placement** — _In a tile_ is the menu described above. _Below the brightness slider_ drops the
+  tile and puts a brightness slider for every display right below the brightness slider of GNOME,
+  or below the volume sliders on a desktop, which has none. Only brightness is shown that way, and
+  the preferences are then reached through the gear in the Extensions app. This choice is only
+  offered on GNOME 50 for now, the version it was checked on; elsewhere the tile is used.
 
 ![](./screenshot.png)
 
