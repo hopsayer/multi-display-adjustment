@@ -36,13 +36,14 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
         if (supportsInline(Config.PACKAGE_VERSION)) {
             const placement = new Adw.ComboRow({
                 title: _('Placement'),
-                subtitle: _('Next to the brightness slider of GNOME, only brightness is shown'),
-                model: Gtk.StringList.new([_('In a tile'), _('Next to the brightness slider')])
+                subtitle: _('Inline means among other Quick Settings sliders'),
+                model: Gtk.StringList.new([_('Tile'), _('Inline')])
             })
 
             const position = new Adw.ComboRow({
                 title: _('Position'),
-                model: Gtk.StringList.new([_('Below the brightness slider'), _('Above the brightness slider')])
+                subtitle: _('Relative to GNOME\'s native slider for the built-in display'),
+                model: Gtk.StringList.new([_('Below'), _('Above')])
             })
 
             const syncPlacement = () => {
