@@ -53,6 +53,9 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
                 position.selected = POSITIONS.indexOf(settings.get_string('inline-position'))
                 position.sensitive = current === 'inline'
                 showContrast.sensitive = current === 'tile'
+
+                // A greyed out switch alone is easy to miss, so say why it is
+                showContrast.subtitle = current === 'tile' ? '' : _('Not available when the sliders are inline')
             }
 
             syncPlacement()
@@ -68,8 +71,8 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
             group.add(position)
         }
 
-        group.add(groupDisplays)
         group.add(showContrast)
+        group.add(groupDisplays)
 
         const page = new Adw.PreferencesPage()
         page.add(group)
