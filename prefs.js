@@ -71,8 +71,15 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
             group.add(position)
         }
 
+        const limitMinimum = new Adw.SwitchRow({
+            title: _('Minimum brightness of 1%'),
+            subtitle: _('Some displays turn the backlight off at 0, leaving no way to see the slider')
+        })
+        settings.bind('limit-minimum-brightness', limitMinimum, 'active', Gio.SettingsBindFlags.DEFAULT)
+
         group.add(showContrast)
         group.add(groupDisplays)
+        group.add(limitMinimum)
 
         const page = new Adw.PreferencesPage()
         page.add(group)
