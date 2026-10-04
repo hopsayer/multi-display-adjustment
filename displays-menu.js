@@ -15,7 +15,7 @@ import { QuickMenuToggle } from 'resource:///org/gnome/shell/ui/quickSettings.js
 import { Slider } from 'resource:///org/gnome/shell/ui/slider.js'
 
 import { devLog } from './code-convenience.js'
-import { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, MIN_BRIGHTNESS, VcpController } from './vcp-controller.js'
+import { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, minBrightness, VcpController } from './vcp-controller.js'
 
 
 /**
@@ -157,6 +157,7 @@ class DisplaysToggle extends QuickMenuToggle {
         this._settings.connectObject(
             'changed::group-displays', () => this._rebuild(),
             'changed::show-contrast', () => this._rebuild(),
+            'changed::limit-minimum-brightness', () => this._rebuild(),
             this)
 
         this.connect('clicked', () => this.menu.toggle())
@@ -217,7 +218,7 @@ class DisplaysToggle extends QuickMenuToggle {
         const brightness = new VcpSliderItem(
             this._ddcutilService, [display], BRIGHTNESS_VCP_CODE,
             this._brightnessIcon, _('Brightness of %s').format(display.name),
-            MIN_BRIGHTNESS
+            minBrightness(this._settings)
         )
         this._section.addMenuItem(brightness)
 
@@ -241,7 +242,7 @@ class DisplaysToggle extends QuickMenuToggle {
         const brightness = new VcpSliderItem(
             this._ddcutilService, displays, BRIGHTNESS_VCP_CODE,
             this._brightnessIcon, _('Brightness of all displays'),
-            MIN_BRIGHTNESS
+            minBrightness(this._settings)
         )
         this._section.addMenuItem(brightness)
 

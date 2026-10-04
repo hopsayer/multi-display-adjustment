@@ -20,6 +20,11 @@
       <summary>Show contrast sliders</summary>
       <description>When disabled, only brightness sliders are shown.</description>
     </key>
+    <key name="limit-minimum-brightness" type="b">
+      <default>true</default>
+      <summary>Minimum brightness of 1%</summary>
+      <description>Keeps the brightness sliders from going below 1%, since some displays turn the backlight off at 0 and leave no way to see the slider. When disabled, they go all the way down.</description>
+    </key>
     <key name="slider-placement" enum="org.gnome.shell.extensions.multi-display-adjustment.SliderPlacement">
       <default>'tile'</default>
       <summary>Where the sliders are placed</summary>

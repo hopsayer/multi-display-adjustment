@@ -148,4 +148,12 @@ class VcpController {
     }
 }
 
-export { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, MIN_BRIGHTNESS, VcpController }
+/**
+ * The lowest fraction of its range a brightness slider can be moved to, as the
+ * limit-minimum-brightness setting says.
+ */
+function minBrightness(settings) {
+    return settings.get_boolean('limit-minimum-brightness') ? MIN_BRIGHTNESS : 0
+}
+
+export { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, minBrightness, VcpController }
