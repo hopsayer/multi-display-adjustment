@@ -42,7 +42,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
 
             const position = new Adw.ComboRow({
                 title: _('Position'),
-                subtitle: _('Relative to GNOME\'s native slider for the built-in display'),
+                subtitle: _('Relative to GNOME\'s laptop display slider. No effect on PC.'),
                 model: Gtk.StringList.new([_('Below'), _('Above')])
             })
 
