@@ -4,6 +4,10 @@
     <value nick="tile" value="0"/>
     <value nick="inline" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.multi-display-adjustment.InlinePosition">
+    <value nick="below" value="0"/>
+    <value nick="above" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.multi-display-adjustment"
           path="/org/gnome/shell/extensions/multi-display-adjustment/">
     <key name="group-displays" type="b">
@@ -20,6 +24,11 @@
       <default>'tile'</default>
       <summary>Where the sliders are placed</summary>
       <description>With "tile" the sliders are in a Quick Settings tile with a menu. With "inline" the brightness sliders sit below the brightness slider of GNOME, without a tile. "inline" only has an effect on the GNOME Shell versions it was checked on.</description>
+    </key>
+    <key name="inline-position" enum="org.gnome.shell.extensions.multi-display-adjustment.InlinePosition">
+      <default>'below'</default>
+      <summary>Where the inline sliders go relative to the brightness slider of GNOME</summary>
+      <description>Only used when the sliders are placed "inline". With "above" they sit right above the brightness slider of GNOME, with "below" right below it.</description>
     </key>
   </schema>
 </schemalist>
