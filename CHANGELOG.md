@@ -17,6 +17,8 @@ repository — use `git log` and `git blame` for per-line authorship.
   50 only, the version it was checked on, and the tile is used on any other.
 * A _Position_ setting for those sliders: below the brightness slider of GNOME, as before, or above
   it.
+* A _Minimum brightness of 1%_ setting, on by default as before. Turned off, the brightness sliders go
+  all the way down.
 
 ### Changed
 
