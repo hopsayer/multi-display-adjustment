@@ -12,9 +12,11 @@ repository — use `git log` and `git blame` for per-line authorship.
 
 ### Added
 
-* A _Placement_ setting. Besides the tile, the brightness sliders can sit right below the brightness
+* A _Placement_ setting. Besides the tile, the brightness sliders can sit next to the brightness
   slider of GNOME, like its own sliders, with no tile and no extra menu level. It is offered on GNOME
   50 only, the version it was checked on, and the tile is used on any other.
+* A _Position_ setting for those sliders: below the brightness slider of GNOME, as before, or above
+  it.
 
 ### Changed
 
