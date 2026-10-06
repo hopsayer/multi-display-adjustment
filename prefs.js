@@ -77,9 +77,9 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
         })
         settings.bind('limit-minimum-brightness', limitMinimum, 'active', Gio.SettingsBindFlags.DEFAULT)
 
+        group.add(limitMinimum)
         group.add(showContrast)
         group.add(groupDisplays)
-        group.add(limitMinimum)
 
         const page = new Adw.PreferencesPage()
         page.add(group)

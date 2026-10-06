@@ -17,12 +17,12 @@ The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app
 * **Position** — with inline sliders, whether they go _Below_ or _Above_ the brightness slider of
   GNOME. With a display above the laptop, _Above_ makes the sliders read in the same order as the
   screens.
+* **Minimum brightness of 1%** — on by default, see above. Turn it off to let the brightness sliders
+  go all the way down.
 * **Show contrast sliders** — turn this off to keep only brightness.
 * **Adjust all displays together** — one brightness slider and one contrast slider set the same
   percentage on every display. Until the slider is moved, it shows the average of the current
   levels; it does not write to the displays just by turning the option on.
-* **Minimum brightness of 1%** — on by default, see above. Turn it off to let the brightness sliders
-  go all the way down.
 
 ![](./screenshot.png)
 
