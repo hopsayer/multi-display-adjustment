@@ -65,13 +65,13 @@ To build the package from a clone instead, run `make install` and log out and ba
    On Ubuntu and Debian
 
    ```bash
-   sudo apt install build-essential ddcutil libddcutil-dev libglib2.0-dev
+   sudo apt install build-essential git ddcutil libddcutil-dev libglib2.0-dev
    ```
 
    On Fedora (and likely other RPM based distributions)
 
    ```bash
-   sudo dnf install make gcc ddcutil libddcutil-devel glib2-devel
+   sudo dnf install make gcc git ddcutil libddcutil-devel glib2-devel
    ```
 
 2. __Build and install the service__
@@ -84,6 +84,15 @@ To build the package from a clone instead, run `make install` and log out and ba
    ```
 
    Service installs to `~/.local/share/dbus-1/services/com.ddcutil.DdcutilService.service` and  `~/.local/bin/ddcutil-service`. It is activated after the next login. You might have to reboot for `ddcutil` to detect your display.
+
+### Access to the displays
+
+`ddcutil` reaches the displays through the `/dev/i2c-*` devices, which the `i2c-dev` kernel module
+provides. Usually nothing has to be set up: `ddcutil` installs a udev rule that gives the logged-in
+user access to the I2C buses of the graphics card. That rule does not match every graphics card,
+though, and some distributions do not load `i2c-dev` at boot. If `ddcutil detect` finds the displays
+only with `sudo`, or not at all, see [I2C device permissions](https://www.ddcutil.com/i2c_permissions/)
+in the ddcutil documentation.
 
 # Troubleshooting
 
