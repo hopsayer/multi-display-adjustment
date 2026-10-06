@@ -17,6 +17,7 @@ ddcutil -d 1 setvcp 10 50
 ```
 
 In case `ddcutil` commands do not work:
+- If they work with `sudo` but not without it, see [I2C device permissions](https://www.ddcutil.com/i2c_permissions/).
 - Check the [ddcutil notes on specific monitors](https://github.com/rockowitz/ddcutil/wiki/Notes-on-Specific-Monitors).
 - Search in [the past issues of ddcutil](https://github.com/rockowitz/ddcutil/issues) using your monitor model or the error message.
 - Finally consider opening an issue in the `ddcutil` project.
