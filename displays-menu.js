@@ -15,6 +15,7 @@ import { QuickMenuToggle } from 'resource:///org/gnome/shell/ui/quickSettings.js
 import { Slider } from 'resource:///org/gnome/shell/ui/slider.js'
 
 import { devLog } from './code-convenience.js'
+import { VcpController } from './vcp-controller.js'
 
 
 const BRIGHTNESS_VCP_CODE = 0x10
@@ -24,41 +25,9 @@ const CONTRAST_VCP_CODE = 0x12
 const MIN_BRIGHTNESS = 0.01
 
 /**
- * Shows `level` in the on-screen display of the monitors behind `connectors`,
- * like GNOME does for the built-in display. GNOME 49 shows it on any set of
- * monitors, before that it is either one monitor or all of them.
- */
-function showOsd(connectors, icon, level) {
-    const monitorManager = global.backend.get_monitor_manager()
-    const monitorIndexes = connectors
-        .map(connector => monitorManager.get_monitor_for_connector(connector))
-        .filter(monitorIndex => monitorIndex !== -1)
-
-    if (monitorIndexes.length === 0) {
-        return
-    }
-
-    if ('showOne' in Main.osdWindowManager) {
-        const levels = {}
-
-        for (const monitorIndex of monitorIndexes) {
-            levels[monitorIndex] = { level, maxLevel: 1 }
-        }
-
-        Main.osdWindowManager.show(icon, null, levels)
-    } else {
-        const monitorIndex = monitorIndexes.length === 1 ? monitorIndexes[0] : -1
-
-        Main.osdWindowManager.show(monitorIndex, icon, null, level, 1)
-    }
-}
-
-/**
- * A slider bound to one VCP feature on one or more displays. Moving it shows
- * the level on those displays.
- *
- * DDC/CI writes are slow. One write is kept in flight per display; later values
- * from a drag replace the pending one so the last position always arrives.
+ * A menu item with a slider bound to one VCP feature on one or more displays,
+ * which a `VcpController` reads and writes. Moving the slider shows the level
+ * on those displays.
  *
  * `minValue` is the lowest fraction of the range the slider can be moved to.
  */
@@ -67,15 +36,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
     _init(ddcutilService, displays, vcpCode, gicon, accessibleName, minValue = 0) {
         super._init({ activate: false })
 
-        this._ddcutilService = ddcutilService
-        this._displays = displays
-        this._gicon = gicon
-        this._vcpCode = vcpCode
-        this._minValue = minValue
-        this._targets = []
-
-        // Cancels the reads still in flight when the item is destroyed
-        this._cancellable = new Gio.Cancellable()
+        this._controller = new VcpController(ddcutilService, displays, vcpCode, gicon, minValue)
 
         this.add_child(new St.Icon({
             gicon,
@@ -101,7 +62,7 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     _onDestroy() {
-        this._cancellable.cancel()
+        this._controller.destroy()
         this._slider.disconnect(this._sliderChangedId)
         this._sliderChangedId = 0
     }
@@ -112,36 +73,16 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
      * with Gio.IOErrorEnum.CANCELLED when the item is destroyed meanwhile.
      */
     async fetchValue() {
-        const values = await Promise.all(
-            this._displays.map(display => this._ddcutilService.getVcp(display.displayId, this._vcpCode, this._cancellable)))
+        const fraction = await this._controller.fetch()
 
-        this._targets = []
-        const fractions = []
-
-        values.forEach((value, i) => {
-            if (value !== null && value.max) {
-                this._targets.push({
-                    displayId: this._displays[i].displayId,
-                    connector: this._displays[i].connector,
-                    max: value.max,
-                    lastWritten: value.current,
-                    pending: null,
-                    writing: false
-                })
-                fractions.push(value.current / value.max)
-            }
-        })
-
-        if (this._targets.length === 0) {
+        if (fraction === null) {
             this.hide()
 
             return false
         }
 
-        const mean = fractions.reduce((sum, fraction) => sum + fraction, 0) / fractions.length
-
         this._slider.block_signal_handler(this._sliderChangedId)
-        this._slider.value = mean
+        this._slider.value = fraction
         this._slider.unblock_signal_handler(this._sliderChangedId)
         this._updateLabel()
         this.show()
@@ -155,47 +96,15 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
 
     _onSliderChanged() {
         // Setting the value notifies again, and that call does the write
-        if (this._slider.value < this._minValue) {
-            this._slider.value = this._minValue
+        if (this._slider.value < this._controller.minValue) {
+            this._slider.value = this._controller.minValue
 
             return
         }
 
         this._updateLabel()
 
-        showOsd(this._targets.map(target => target.connector), this._gicon, this._slider.value)
-
-        // On a short range the minimum fraction can round down to 0
-        const minimum = this._minValue > 0 ? 1 : 0
-
-        for (const target of this._targets) {
-            this._queueWrite(target, Math.max(Math.round(this._slider.value * target.max), minimum))
-        }
-    }
-
-    _queueWrite(target, value) {
-        if (value === target.lastWritten && target.pending === null) {
-            return
-        }
-
-        target.pending = value
-
-        if (!target.writing) {
-            this._drain(target)
-        }
-    }
-
-    async _drain(target) {
-        target.writing = true
-
-        while (target.pending !== null) {
-            const value = target.pending
-            target.pending = null
-            target.lastWritten = value
-            await this._ddcutilService.setVcp(target.displayId, this._vcpCode, value)
-        }
-
-        target.writing = false
+        this._controller.apply(this._slider.value)
     }
 
     // Menu items would otherwise take Left and Right for navigation

@@ -8,6 +8,13 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## Unreleased
+
+### Changed
+
+* Reading and writing a display's brightness or contrast moved out of the menu item that shows the
+  slider into `VcpController`, so that another widget can use it. The sliders behave as before.
+
 ## 1.3.0 (2026-10-02)
 
 ### Added
