@@ -30,7 +30,23 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
         const showContrast = new Adw.SwitchRow({
             title: _('Show contrast sliders')
         })
-        settings.bind('show-contrast', showContrast, 'active', Gio.SettingsBindFlags.DEFAULT)
+
+        // While the switch is greyed out it shows as off, as an "on" would claim contrast sliders that are
+        // not there. The setting is left alone, so the switch is back as it was when the sliders are in a tile.
+        const syncContrast = () => {
+            showContrast.active = showContrast.sensitive && settings.get_boolean('show-contrast')
+        }
+
+        showContrast.connect('notify::active', () => {
+            if (showContrast.sensitive) {
+                settings.set_boolean('show-contrast', showContrast.active)
+            }
+        })
+
+        const contrastChangedId = settings.connect('changed::show-contrast', syncContrast)
+        window.connect('close-request', () => settings.disconnect(contrastChangedId))
+
+        syncContrast()
 
         // The inline sliders only work on some shell versions, elsewhere there is nothing to choose
         if (supportsInline(Config.PACKAGE_VERSION)) {
@@ -53,6 +69,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
                 position.selected = POSITIONS.indexOf(settings.get_string('inline-position'))
                 position.sensitive = current === 'inline'
                 showContrast.sensitive = current === 'tile'
+                syncContrast()
 
                 // A greyed out switch alone is easy to miss, so say why it is
                 showContrast.subtitle = current === 'tile' ? '' : _('Not available when the sliders are inline')
