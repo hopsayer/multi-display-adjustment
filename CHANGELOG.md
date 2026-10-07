@@ -8,25 +8,37 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
-## Unreleased
+## 1.4.0 (2026-10-07)
+
+Thanks to [@hopsayer], who joins as a contributor with this release and brought most of it: the
+inline sliders, the minimum brightness setting, the clearer preferences and the `VcpController` they
+all rest on ([#16], [#17], [#18], [#19]).
 
 ### Added
 
 * A _Placement_ setting. Besides the tile, the brightness sliders can sit next to the brightness
   slider of GNOME, like its own sliders, with no tile and no extra menu level. It is offered on GNOME
-  50 only, the version it was checked on, and the tile is used on any other.
+  50 only, the version it was checked on, and the tile is used on any other ([#17]).
 * A _Position_ setting for those sliders: below the brightness slider of GNOME, as before, or above
-  it.
+  it ([#18]).
 * A _Minimum brightness of 1%_ setting, on by default as before. Turned off, the brightness sliders go
-  all the way down.
+  all the way down ([#19]).
 
 ### Changed
 
 * The _Adjust all displays together_ switch is now called _Adjust all external displays together_,
   as the laptop's own display is never included. It is greyed out, with a note, while fewer than two
-  external displays are connected, since it changes nothing then.
+  external displays are connected, since it changes nothing then ([#19]).
+* The description of the extension mentions the inline sliders, and is shorter.
 * Reading and writing a display's brightness or contrast moved out of the menu item that shows the
-  slider into `VcpController`, so that another widget can use it. The sliders behave as before.
+  slider into `VcpController`, so that another widget can use it. The sliders behave as before
+  ([#16]).
+
+[@hopsayer]: https://github.com/hopsayer
+[#16]: https://github.com/samuelcecilio/multi-display-adjustment/pull/16
+[#17]: https://github.com/samuelcecilio/multi-display-adjustment/pull/17
+[#18]: https://github.com/samuelcecilio/multi-display-adjustment/pull/18
+[#19]: https://github.com/samuelcecilio/multi-display-adjustment/pull/19
 
 ## 1.3.0 (2026-10-02)
 
