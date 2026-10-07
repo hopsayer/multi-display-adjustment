@@ -55,8 +55,13 @@ gsettings --schemadir ~/.local/share/gnome-shell/extensions/multi-display-adjust
 
 ## Installation
 
-This extension is not on [extensions.gnome.org](https://extensions.gnome.org) yet, so it is installed
-from a package built here. Grab the `.shell-extension.zip` of the
+Install it from
+[extensions.gnome.org](https://extensions.gnome.org/extension/10707/multi-display-adjustment/), in
+the browser or with an app such as Extension Manager. It also needs _ddcutil-service_, see
+[below](#installation-of-ddcutil-service).
+
+A new version shows up there once it passes review. To install a release before that, grab the
+`.shell-extension.zip` of the
 [latest release](https://github.com/samuelcecilio/multi-display-adjustment/releases/latest) and
 
 ```bash
