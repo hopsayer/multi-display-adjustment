@@ -47,10 +47,25 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
         const group = new Adw.PreferencesGroup({ title: _('Sliders') })
 
         const groupDisplays = new Adw.SwitchRow({
-            title: _('Adjust all external displays together'),
-            subtitle: _('One slider block controls all external displays. No effect with one.')
+            title: _('Adjust all external displays together')
         })
-        settings.bind('group-displays', groupDisplays, 'active', Gio.SettingsBindFlags.DEFAULT)
+        const syncGroup = bindSwitch(window, settings, 'group-displays', groupDisplays)
+
+        // Grouping joins external displays, so it takes two of them. The extension tells how many there are.
+        const syncGroupAvailable = () => {
+            const available = settings.get_int('external-display-count') >= 2
+
+            groupDisplays.sensitive = available
+            groupDisplays.subtitle = available
+                ? _('One slider block controls all external displays')
+                : _('Not available with fewer than two external displays')
+            syncGroup()
+        }
+
+        const countChangedId = settings.connect('changed::external-display-count', syncGroupAvailable)
+        window.connect('close-request', () => settings.disconnect(countChangedId))
+
+        syncGroupAvailable()
 
         const showContrast = new Adw.SwitchRow({
             title: _('Show contrast sliders')
