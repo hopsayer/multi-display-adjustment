@@ -124,6 +124,14 @@ in the ddcutil documentation.
 * [Diagnosing issues](./troubleshooting.md#diagnosing-issues)
 * [Known issues](./troubleshooting.md#known-issues)
 
+# Thanks
+
+* [@hopsayer](https://github.com/hopsayer), for the inline sliders and much of what came with them
+  in 1.4.0.
+* Everyone who reports an issue or tries a change on their own displays. See the
+  [contributors](https://github.com/samuelcecilio/multi-display-adjustment/graphs/contributors) for
+  everyone whose code is in here.
+
 # License
 
 This extension is distributed under the terms of the GNU General Public License, version 2 or later.
