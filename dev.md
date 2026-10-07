@@ -83,6 +83,34 @@ It runs GNOME Shell headless, because GNOME Shell 50 dropped both `--nested` and
 `make nested` compiles the GSettings schema first, because `getSettings()` throws if
 `schemas/gschemas.compiled` is missing.
 
+## Mock displays
+
+```bash
+make nested MOCK=2
+```
+
+Sets `MULTI_DISPLAY_ADJUSTMENT_MOCK=2`, which makes the extension load `dev/mock-services.js` and use
+two mock displays instead of what Mutter and ddcutil-service report. Their brightness and contrast
+live in memory, and every write is logged as `Mock display 1: VCP 0x10 set to 42`. The second display
+does not report contrast, so that a display without it is covered too. The mock files are not part of
+the package, so this works with `make link`, not with `make install`.
+
+The headless session of `make nested` has no screen to look at, so there it shows that the extension
+starts and what it does with the displays. To see the sliders, set the variable for a whole session,
+for example in a virtual machine, with a file in `~/.config/environment.d/`:
+
+```bash
+mkdir -p ~/.config/environment.d
+echo 'MULTI_DISPLAY_ADJUSTMENT_MOCK=2' > ~/.config/environment.d/90-multi-display-mock.conf
+```
+
+Log out and back in, and remove the file and log in again when done. The same works for a shell
+version other than the one on the host, which is what the mock is for.
+
+What the mock does not do: the connectors are made up, so no on-screen display appears, and displays
+are not plugged in or out while it runs. The extension also writes `external-display-count`, like it
+always does, to the settings of the user who runs it.
+
 ## Lint
 
 ```bash
