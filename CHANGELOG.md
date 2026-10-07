@@ -17,9 +17,14 @@ repository — use `git log` and `git blame` for per-line authorship.
   50 only, the version it was checked on, and the tile is used on any other.
 * A _Position_ setting for those sliders: below the brightness slider of GNOME, as before, or above
   it.
+* A _Minimum brightness of 1%_ setting, on by default as before. Turned off, the brightness sliders go
+  all the way down.
 
 ### Changed
 
+* The _Adjust all displays together_ switch is now called _Adjust all external displays together_,
+  as the laptop's own display is never included. It is greyed out, with a note, while fewer than two
+  external displays are connected, since it changes nothing then.
 * Reading and writing a display's brightness or contrast moved out of the menu item that shows the
   slider into `VcpController`, so that another widget can use it. The sliders behave as before.
 

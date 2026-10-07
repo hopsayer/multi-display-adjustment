@@ -10,7 +10,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
 import { QuickSlider } from 'resource:///org/gnome/shell/ui/quickSettings.js'
 
-import { BRIGHTNESS_VCP_CODE, MIN_BRIGHTNESS, VcpController } from './vcp-controller.js'
+import { BRIGHTNESS_VCP_CODE, minBrightness, VcpController } from './vcp-controller.js'
 
 
 // Quick Settings has two columns, and its own sliders span both
@@ -29,10 +29,10 @@ const MAX_WAIT_STEPS = 50
  */
 const BrightnessSlider = GObject.registerClass(
 class BrightnessSlider extends QuickSlider {
-    _init(ddcutilService, displays, osdIcon, accessibleName) {
+    _init(ddcutilService, displays, osdIcon, accessibleName, minValue) {
         super._init({ iconName: 'display-brightness-symbolic' })
 
-        this._controller = new VcpController(ddcutilService, displays, BRIGHTNESS_VCP_CODE, osdIcon, MIN_BRIGHTNESS)
+        this._controller = new VcpController(ddcutilService, displays, BRIGHTNESS_VCP_CODE, osdIcon, minValue)
 
         this.slider.accessible_name = accessibleName
 
@@ -139,6 +139,7 @@ class InlineSliders {
         this._settings.connectObject(
             'changed::group-displays', () => this._rebuild(),
             'changed::inline-position', () => this._rebuild(),
+            'changed::limit-minimum-brightness', () => this._rebuild(),
             this)
     }
 
@@ -166,13 +167,14 @@ class InlineSliders {
         this._clear()
 
         const grouped = this._settings.get_boolean('group-displays') && this._displays.length >= 2
+        const minValue = minBrightness(this._settings)
 
         if (grouped) {
             this._sliders = [new BrightnessSlider(
-                this._ddcutilService, this._displays, this._osdIcon, _('Brightness of all displays'))]
+                this._ddcutilService, this._displays, this._osdIcon, _('Brightness of all displays'), minValue)]
         } else {
             this._sliders = this._displays.map(display => new BrightnessSlider(
-                this._ddcutilService, [display], this._osdIcon, _('Brightness of %s').format(display.name)))
+                this._ddcutilService, [display], this._osdIcon, _('Brightness of %s').format(display.name), minValue))
         }
 
         this._place(this._sliders)

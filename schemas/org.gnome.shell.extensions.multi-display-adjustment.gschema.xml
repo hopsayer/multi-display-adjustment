@@ -10,15 +10,25 @@
   </enum>
   <schema id="org.gnome.shell.extensions.multi-display-adjustment"
           path="/org/gnome/shell/extensions/multi-display-adjustment/">
+    <key name="external-display-count" type="i">
+      <default>0</default>
+      <summary>Number of external displays the extension can control</summary>
+      <description>Written by the extension for the preferences window, which runs in its own process and cannot see the displays. Not meant to be changed by hand.</description>
+    </key>
     <key name="group-displays" type="b">
       <default>false</default>
-      <summary>Adjust all displays together</summary>
-      <description>One brightness and one contrast slider apply the same level to every display.</description>
+      <summary>Adjust all external displays together</summary>
+      <description>One brightness and one contrast slider apply the same level to every external display. Only has an effect with two or more of them.</description>
     </key>
     <key name="show-contrast" type="b">
       <default>true</default>
       <summary>Show contrast sliders</summary>
       <description>When disabled, only brightness sliders are shown.</description>
+    </key>
+    <key name="limit-minimum-brightness" type="b">
+      <default>true</default>
+      <summary>Minimum brightness of 1%</summary>
+      <description>Keeps the brightness sliders from going below 1%, since some displays turn the backlight off at 0 and leave no way to see the slider. When disabled, they go all the way down.</description>
     </key>
     <key name="slider-placement" enum="org.gnome.shell.extensions.multi-display-adjustment.SliderPlacement">
       <default>'tile'</default>

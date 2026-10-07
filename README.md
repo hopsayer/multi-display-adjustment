@@ -4,8 +4,8 @@ Offers sliders to control external displays' brightness and contrast through DDC
 
 A single _Displays_ entry in Quick Settings opens a menu where every connected display has its own
 brightness and contrast sliders, under the display name that Settings shows. Each slider shows the
-level as a number from 0 to 100. Brightness stops at 1, since some displays turn the backlight off at
-0 and leave no way to see the slider again.
+level as a number from 0 to 100. Brightness stops at 1 by default, since some displays turn the
+backlight off at 0 and leave no way to see the slider again.
 
 The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app) opens preferences:
 
@@ -17,8 +17,10 @@ The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app
 * **Position** — with inline sliders, whether they go _Below_ or _Above_ the brightness slider of
   GNOME. With a display above the laptop, _Above_ makes the sliders read in the same order as the
   screens.
+* **Minimum brightness of 1%** — on by default, see above. Turn it off to let the brightness sliders
+  go all the way down.
 * **Show contrast sliders** — turn this off to keep only brightness.
-* **Adjust all displays together** — one brightness slider and one contrast slider set the same
+* **Adjust all external displays together** — one brightness slider and one contrast slider set the same
   percentage on every display. Until the slider is moved, it shows the average of the current
   levels; it does not write to the displays just by turning the option on.
 
