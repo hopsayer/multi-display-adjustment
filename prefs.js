@@ -100,7 +100,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
                 syncContrast()
 
                 // A greyed out switch alone is easy to miss, so say why it is
-                showContrast.subtitle = current === 'tile' ? '' : _('Not available when the sliders are inline')
+                showContrast.subtitle = current === 'tile' ? '' : _('Not available with inline placement')
             }
 
             syncPlacement()
