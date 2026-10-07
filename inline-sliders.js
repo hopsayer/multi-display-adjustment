@@ -87,23 +87,30 @@ class BrightnessSlider extends QuickSlider {
 })
 
 /**
- * Puts `sliders` in Quick Settings right below the brightness slider of GNOME.
- * Without it, which is the case on a desktop, they go below the volume sliders,
- * and without those at the end.
+ * Puts `sliders` in Quick Settings right below the brightness slider of GNOME,
+ * or right above it when `above` is set. Without it, which is the case on a
+ * desktop, they go below the volume sliders, and without those at the end.
  *
- * The shell has no call for inserting after an item, only before one, so this
- * inserts before the item that follows the anchor. The anchors are the
+ * The shell has no call for inserting after an item, only before one, so below
+ * an anchor means before the item that follows it. The anchors are the
  * indicators of the shell, which keep their own sliders even when those are
- * hidden, so a hidden brightness slider still marks the spot.
+ * hidden, so a hidden brightness slider still marks the spot, and above or
+ * below it makes no difference.
  */
-function insertBelowNativeSliders(quickSettings, sliders) {
+function insertNextToNativeSliders(quickSettings, sliders, above) {
     let sibling = null
 
-    for (const indicator of [quickSettings._brightness, quickSettings._volumeInput, quickSettings._volumeOutput]) {
+    const anchors = [
+        [quickSettings._brightness, above],
+        [quickSettings._volumeInput, false],
+        [quickSettings._volumeOutput, false]
+    ]
+
+    for (const [indicator, isAbove] of anchors) {
         const anchor = indicator?.quickSettingsItems?.at(-1)
 
         if (anchor?.get_parent()) {
-            sibling = anchor.get_next_sibling()
+            sibling = isAbove ? anchor : anchor.get_next_sibling()
 
             break
         }
@@ -129,7 +136,10 @@ class InlineSliders {
 
         this._osdIcon = new Gio.ThemedIcon({ name: 'display-brightness-symbolic' })
 
-        this._settings.connectObject('changed::group-displays', () => this._rebuild(), this)
+        this._settings.connectObject(
+            'changed::group-displays', () => this._rebuild(),
+            'changed::inline-position', () => this._rebuild(),
+            this)
     }
 
     setDisplays(displays) {
@@ -172,10 +182,11 @@ class InlineSliders {
 
     _place(sliders) {
         const quickSettings = Main.panel.statusArea.quickSettings
+        const above = this._settings.get_string('inline-position') === 'above'
 
         // The shell creates all of its indicators in one go, so this one being there means the others are
         if (quickSettings._brightness) {
-            insertBelowNativeSliders(quickSettings, sliders)
+            insertNextToNativeSliders(quickSettings, sliders, above)
 
             return
         }
@@ -190,7 +201,7 @@ class InlineSliders {
             }
 
             this._waitId = 0
-            insertBelowNativeSliders(quickSettings, sliders)
+            insertNextToNativeSliders(quickSettings, sliders, above)
 
             return GLib.SOURCE_REMOVE
         })
