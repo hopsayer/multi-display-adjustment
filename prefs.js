@@ -81,9 +81,11 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
                 model: Gtk.StringList.new([_('Tile'), _('Inline')])
             })
 
+            const positionSubtitle = _('Relative to GNOME\'s laptop display slider. No effect on PC.')
+
             const position = new Adw.ComboRow({
                 title: _('Position'),
-                subtitle: _('Relative to GNOME\'s laptop display slider. No effect on PC.'),
+                subtitle: positionSubtitle,
                 model: Gtk.StringList.new([_('Below'), _('Above')])
             })
 
@@ -93,6 +95,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
                 placement.selected = PLACEMENTS.indexOf(current)
                 position.selected = POSITIONS.indexOf(settings.get_string('inline-position'))
                 position.sensitive = current === 'inline'
+                position.subtitle = current === 'inline' ? positionSubtitle : _('Not available with tile placement')
                 showContrast.sensitive = current === 'tile'
                 syncContrast()
 
