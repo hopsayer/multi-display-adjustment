@@ -7,6 +7,12 @@ import Gio from 'gi://Gio'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 
 
+const BRIGHTNESS_VCP_CODE = 0x10
+const CONTRAST_VCP_CODE = 0x12
+
+// Some displays turn the backlight off at 0, leaving no way to see the slider
+const MIN_BRIGHTNESS = 0.01
+
 /**
  * Shows `level` in the on-screen display of the monitors behind `connectors`,
  * like GNOME does for the built-in display. GNOME 49 shows it on any set of
@@ -142,4 +148,4 @@ class VcpController {
     }
 }
 
-export { VcpController }
+export { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, MIN_BRIGHTNESS, VcpController }

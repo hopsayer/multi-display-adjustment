@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="multi-display-adjustment@cecilio.xyz">
+  <enum id="org.gnome.shell.extensions.multi-display-adjustment.SliderPlacement">
+    <value nick="tile" value="0"/>
+    <value nick="inline" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.multi-display-adjustment"
           path="/org/gnome/shell/extensions/multi-display-adjustment/">
     <key name="group-displays" type="b">
@@ -11,6 +15,11 @@
       <default>true</default>
       <summary>Show contrast sliders</summary>
       <description>When disabled, only brightness sliders are shown.</description>
+    </key>
+    <key name="slider-placement" enum="org.gnome.shell.extensions.multi-display-adjustment.SliderPlacement">
+      <default>'tile'</default>
+      <summary>Where the sliders are placed</summary>
+      <description>With "tile" the sliders are in a Quick Settings tile with a menu. With "inline" the brightness sliders sit below the brightness slider of GNOME, without a tile. "inline" only has an effect on the GNOME Shell versions it was checked on.</description>
     </key>
   </schema>
 </schemalist>

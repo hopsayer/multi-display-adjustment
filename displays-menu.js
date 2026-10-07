@@ -15,14 +15,8 @@ import { QuickMenuToggle } from 'resource:///org/gnome/shell/ui/quickSettings.js
 import { Slider } from 'resource:///org/gnome/shell/ui/slider.js'
 
 import { devLog } from './code-convenience.js'
-import { VcpController } from './vcp-controller.js'
+import { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, MIN_BRIGHTNESS, VcpController } from './vcp-controller.js'
 
-
-const BRIGHTNESS_VCP_CODE = 0x10
-const CONTRAST_VCP_CODE = 0x12
-
-// Some displays turn the backlight off at 0, leaving no way to see the slider
-const MIN_BRIGHTNESS = 0.01
 
 /**
  * A menu item with a slider bound to one VCP feature on one or more displays,
