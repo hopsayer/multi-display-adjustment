@@ -15,6 +15,31 @@ import { supportsInline } from './inline-support.js'
 const PLACEMENTS = ['tile', 'inline']
 const POSITIONS = ['below', 'above']
 
+/**
+ * Ties the switch `row` to the boolean setting `key`, except that a switch that
+ * is greyed out shows as off, as an "on" would claim something that is not
+ * there. The setting is left alone, so the switch is back as it was when it can
+ * be used again. Returns a function to call after changing `row.sensitive`.
+ */
+function bindSwitch(window, settings, key, row) {
+    const sync = () => {
+        row.active = row.sensitive && settings.get_boolean(key)
+    }
+
+    row.connect('notify::active', () => {
+        if (row.sensitive) {
+            settings.set_boolean(key, row.active)
+        }
+    })
+
+    const changedId = settings.connect(`changed::${key}`, sync)
+    window.connect('close-request', () => settings.disconnect(changedId))
+
+    sync()
+
+    return sync
+}
+
 export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings()
@@ -31,22 +56,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
             title: _('Show contrast sliders')
         })
 
-        // While the switch is greyed out it shows as off, as an "on" would claim contrast sliders that are
-        // not there. The setting is left alone, so the switch is back as it was when the sliders are in a tile.
-        const syncContrast = () => {
-            showContrast.active = showContrast.sensitive && settings.get_boolean('show-contrast')
-        }
-
-        showContrast.connect('notify::active', () => {
-            if (showContrast.sensitive) {
-                settings.set_boolean('show-contrast', showContrast.active)
-            }
-        })
-
-        const contrastChangedId = settings.connect('changed::show-contrast', syncContrast)
-        window.connect('close-request', () => settings.disconnect(contrastChangedId))
-
-        syncContrast()
+        const syncContrast = bindSwitch(window, settings, 'show-contrast', showContrast)
 
         // The inline sliders only work on some shell versions, elsewhere there is nothing to choose
         if (supportsInline(Config.PACKAGE_VERSION)) {
