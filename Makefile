@@ -3,7 +3,7 @@ UUID = multi-display-adjustment@cecilio.xyz
 SOURCE_DIR = $(CURDIR)
 INSTALL_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
-JS_SOURCES = $(wildcard *.js)
+JS_SOURCES = $(wildcard *.js dev/*.js)
 SCHEMAS_DIR = schemas
 SCHEMAS_COMPILED = $(SCHEMAS_DIR)/gschemas.compiled
 PACKAGE = dist/$(UUID).shell-extension.zip
@@ -29,6 +29,7 @@ help:
 	@echo "  make check      look for syntax errors in the sources"
 	@echo "  make lint       run the extensions.gnome.org analyzer on the package"
 	@echo "  make nested     start a throwaway shell to catch startup errors"
+	@echo "                  with MOCK=2 it has two mock displays"
 	@echo "  make schemas    compile GSettings schemas for a symlink install"
 	@echo "  make logs       follow the shell log"
 
@@ -118,7 +119,7 @@ lint: pack
 # show up in it. It is for seeing whether the extension starts without errors.
 # The compiled schema is required: getSettings() throws if it is missing.
 nested: schemas
-	dbus-run-session -- gnome-shell --headless --virtual-monitor 1920x1080 --virtual-monitor 1280x1024
+	dbus-run-session -- env $(if $(MOCK),MULTI_DISPLAY_ADJUSTMENT_MOCK=$(MOCK)) gnome-shell --headless --virtual-monitor 1920x1080 --virtual-monitor 1280x1024
 
 logs:
 	journalctl --user -f -o cat /usr/bin/gnome-shell
