@@ -5,6 +5,7 @@
 // A fork of Display Adjustment by Maciej Wójcik,
 // https://gitlab.com/w8jcik/display-adjustment
 
+import GLib from 'gi://GLib'
 import GObject from 'gi://GObject'
 
 import * as Config from 'resource:///org/gnome/shell/misc/config.js'
@@ -107,6 +108,15 @@ export default class DisplaysAdjustmentsExtension extends Extension {
     async _connectServices() {
         const displayConfigService = this._displayConfigService
         const ddcutilService = this._ddcutilService
+
+        // Development only, see "Mock displays" in dev.md. The file is not in the package.
+        const mockCount = parseInt(GLib.getenv('MULTI_DISPLAY_ADJUSTMENT_MOCK'), 10)
+
+        if (mockCount > 0) {
+            const { installMockServices } = await import('./dev/mock-services.js')
+
+            installMockServices(displayConfigService, ddcutilService, mockCount)
+        }
 
         await displayConfigService.init()
         await ddcutilService.init()
