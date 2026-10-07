@@ -1,30 +1,11 @@
 # Multi Display Adjustment GNOME shell extension
 
-Offers sliders to control external displays' brightness and contrast through DDC/CI.
+Offers sliders in Quick Settings to control the brightness and contrast of external displays
+through DDC/CI, one set per display, under the display name that Settings shows. Moving a slider
+shows the level in the on-screen display of the screens it adjusts, as GNOME does for a laptop's
+own screen.
 
-A single _Displays_ entry in Quick Settings opens a menu where every connected display has its own
-brightness and contrast sliders, under the display name that Settings shows. Each slider shows the
-level as a number from 0 to 100. Brightness stops at 1 by default, since some displays turn the
-backlight off at 0 and leave no way to see the slider again.
-
-The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app) opens preferences:
-
-* **Placement** — _Tile_ is the menu described above. _Inline_ drops the tile and puts a brightness
-  slider for every display among the Quick Settings sliders, next to the brightness slider of GNOME,
-  or below the volume sliders on a desktop, which has none. Only brightness is shown that way, and
-  the preferences are then reached through the gear in the Extensions app. This choice is only
-  offered on GNOME 50 for now, the version it was checked on; elsewhere the tile is used.
-* **Position** — with inline sliders, whether they go _Below_ or _Above_ the brightness slider of
-  GNOME. With a display above the laptop, _Above_ makes the sliders read in the same order as the
-  screens.
-* **Minimum brightness of 1%** — on by default, see above. Turn it off to let the brightness sliders
-  go all the way down.
-* **Show contrast sliders** — turn this off to keep only brightness.
-* **Adjust all external displays together** — one brightness slider and one contrast slider set the same
-  percentage on every display. Until the slider is moved, it shows the average of the current
-  levels; it does not write to the displays just by turning the option on.
-
-![](./screenshot.png)
+![The sliders in the tile, left, and inline, right](./screenshot.png)
 
 > **This is a fork of [w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment)** by Maciej Wójcik,
 > focused on multi-monitor setups. All credit for the original extension goes to the upstream author;
@@ -33,6 +14,40 @@ The menu's _Display Adjustment Settings_ item (or the gear in the Extensions app
 > both at once will give you duplicate sliders.
 
 Extension relies on `ddcutil-service`. Installation process of `ddcutil-service` is quick and non-intrusive. `ddcutil-service` allows more responsive communication with the displays than calling `ddcutil`.
+
+## Two ways to show the sliders
+
+* **Tile** (the default, left above) — a single _Displays_ entry in Quick Settings opens a menu
+  where every display has a brightness and a contrast slider, each with its level as a number from
+  0 to 100. The entry shows the name of the display, or how many there are, and is hidden when
+  there are none.
+* **Inline** (right above) — no tile: every display gets a brightness slider among the sliders of
+  Quick Settings, right next to the brightness slider of GNOME, or below the volume sliders on a
+  desktop, which has none. They look and behave like the slider of GNOME. Only brightness is shown
+  this way. For now this mode is only offered on GNOME 50, the version it was checked on; elsewhere
+  the tile is used.
+
+## Settings
+
+Preferences open from _Display Adjustment Settings_ at the bottom of the tile's menu, or from the
+gear next to the extension in the Extensions app, which is the only way with inline sliders.
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| **Placement** | Tile | _Tile_ or _Inline_, see above. Only shown on GNOME 50. |
+| **Position** | Below | With inline sliders, whether they go _Below_ or _Above_ the brightness slider of GNOME. With a display above the laptop, _Above_ makes the sliders read in the same order as the screens. Has no effect on a desktop, which has no brightness slider of its own. |
+| **Minimum brightness of 1%** | On | Keeps brightness from going below 1, since some displays turn the backlight off at 0 and leave no way to see the slider again. Turn it off to let the sliders go all the way down. |
+| **Show contrast sliders** | On | Turn it off to keep only brightness. Greyed out with inline sliders, which only show brightness. |
+| **Adjust all external displays together** | Off | One brightness slider, and one contrast slider in the tile, set the same level on every external display. Until a slider is moved, it shows the average of the current levels; turning this on does not write to the displays. The laptop's own screen is never included. Greyed out with fewer than two external displays. |
+
+Settings can also be changed from a terminal, with the key names `slider-placement` (`tile` or
+`inline`), `inline-position` (`below` or `above`), `limit-minimum-brightness`, `show-contrast` and
+`group-displays`, for example
+
+```bash
+gsettings --schemadir ~/.local/share/gnome-shell/extensions/multi-display-adjustment@cecilio.xyz/schemas \
+    set org.gnome.shell.extensions.multi-display-adjustment slider-placement inline
+```
 
 ## Dependencies
 
