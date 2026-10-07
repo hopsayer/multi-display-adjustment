@@ -8,6 +8,13 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## Unreleased
+
+### Changed
+
+* The description of the extension no longer says the sliders next to the brightness slider of
+  GNOME are only offered on GNOME 50.
+
 ## 1.4.1 (2026-10-07)
 
 ### Changed
