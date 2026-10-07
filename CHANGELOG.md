@@ -8,6 +8,13 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
+## Unreleased
+
+### Changed
+
+* The _Inline_ placement is now offered on GNOME 46 to 49 as well, not only on 50. The parts of
+  Quick Settings it relies on are the same in all of them.
+
 ## 1.4.0 (2026-10-07)
 
 Thanks to [@hopsayer], who joins as a contributor with this release and brought most of it: the

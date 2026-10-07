@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // The inline sliders find their place through parts of Quick Settings that are
-// private to the shell and change between releases, so they are only turned on
-// for the versions they were checked on.
-const INLINE_SHELL_VERSIONS = [50]
+// private to the shell and can change between releases, so they are only turned
+// on for the versions whose sources were checked. Those parts are the same from
+// GNOME 46 to 50. Check them again before adding a version to metadata.json.
+const INLINE_SHELL_VERSIONS = [46, 47, 48, 49, 50]
 
 /**
  * Whether the inline sliders can be used on a shell whose version is
