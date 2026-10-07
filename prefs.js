@@ -22,7 +22,7 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
         const group = new Adw.PreferencesGroup({ title: _('Sliders') })
 
         const groupDisplays = new Adw.SwitchRow({
-            title: _('Adjust all displays together'),
+            title: _('Adjust all external displays together'),
             subtitle: _('One slider block controls all external displays. No effect with one.')
         })
         settings.bind('group-displays', groupDisplays, 'active', Gio.SettingsBindFlags.DEFAULT)

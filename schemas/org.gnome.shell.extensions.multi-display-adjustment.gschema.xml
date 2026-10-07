@@ -12,8 +12,8 @@
           path="/org/gnome/shell/extensions/multi-display-adjustment/">
     <key name="group-displays" type="b">
       <default>false</default>
-      <summary>Adjust all displays together</summary>
-      <description>One brightness and one contrast slider apply the same level to every display.</description>
+      <summary>Adjust all external displays together</summary>
+      <description>One brightness and one contrast slider apply the same level to every external display. Only has an effect with two or more of them.</description>
     </key>
     <key name="show-contrast" type="b">
       <default>true</default>
