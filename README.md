@@ -24,8 +24,7 @@ Extension relies on `ddcutil-service`. Installation process of `ddcutil-service`
 * **Inline** (right above) — no tile: every display gets a brightness slider among the sliders of
   Quick Settings, right next to the brightness slider of GNOME, or below the volume sliders on a
   desktop, which has none. They look and behave like the slider of GNOME. Only brightness is shown
-  this way. For now this mode is only offered on GNOME 50, the version it was checked on; elsewhere
-  the tile is used.
+  this way.
 
 ## Settings
 
@@ -34,7 +33,7 @@ gear next to the extension in the Extensions app, which is the only way with inl
 
 | Setting | Default | What it does |
 | --- | --- | --- |
-| **Placement** | Tile | _Tile_ or _Inline_, see above. Only shown on GNOME 50. |
+| **Placement** | Tile | _Tile_ or _Inline_, see above. |
 | **Position** | Below | With inline sliders, whether they go _Below_ or _Above_ the brightness slider of GNOME. With a display above the laptop, _Above_ makes the sliders read in the same order as the screens. Has no effect on a desktop, which has no brightness slider of its own. |
 | **Minimum brightness of 1%** | On | Keeps brightness from going below 1, since some displays turn the backlight off at 0 and leave no way to see the slider again. Turn it off to let the sliders go all the way down. |
 | **Show contrast sliders** | On | Turn it off to keep only brightness. Greyed out with inline sliders, which only show brightness. |
