@@ -147,6 +147,9 @@ export default class DisplaysAdjustmentsExtension extends Extension {
 
         this._displays = displays
         this._view.setDisplays(displays)
+
+        // For the preferences window, which runs in its own process
+        this._settings.set_int('external-display-count', displays.length)
     }
 
     disable() {

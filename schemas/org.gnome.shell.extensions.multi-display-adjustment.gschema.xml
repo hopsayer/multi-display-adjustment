@@ -10,6 +10,11 @@
   </enum>
   <schema id="org.gnome.shell.extensions.multi-display-adjustment"
           path="/org/gnome/shell/extensions/multi-display-adjustment/">
+    <key name="external-display-count" type="i">
+      <default>0</default>
+      <summary>Number of external displays the extension can control</summary>
+      <description>Written by the extension for the preferences window, which runs in its own process and cannot see the displays. Not meant to be changed by hand.</description>
+    </key>
     <key name="group-displays" type="b">
       <default>false</default>
       <summary>Adjust all external displays together</summary>
