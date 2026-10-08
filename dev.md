@@ -83,6 +83,11 @@ It runs GNOME Shell headless, because GNOME Shell 50 dropped both `--nested` and
 `make nested` compiles the GSettings schema first, because `getSettings()` throws if
 `schemas/gschemas.compiled` is missing.
 
+## Other GNOME Shell versions
+
+[docs/testing.md](docs/testing.md) lists what to check on a version before the inline sliders are
+offered on it, and records which versions have been checked.
+
 ## Lint
 
 ```bash
