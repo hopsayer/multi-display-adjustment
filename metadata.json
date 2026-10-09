@@ -1,6 +1,6 @@
 {
   "name": "Multi Display Adjustment",
-  "description": "Brightness and contrast sliders for external displays, through DDC/CI. Every display gets its own sliders, under the name that Settings shows, either in a Displays tile in Quick Settings or next to the brightness slider of GNOME. All external displays can also be adjusted together.\nRequires ddcutil-service, which is quick to install, see https://github.com/samuelcecilio/multi-display-adjustment#installation-of-ddcutil-service. It keeps the sliders more responsive than calling ddcutil.\nA fork of Display Adjustment by Maciej Wójcik (https://gitlab.com/w8jcik/display-adjustment).",
+  "description": "Adjust external displays via DDC/CI:\n\n• Responsive brightness/contrast sliders\n• Display names as in Settings\n• Placement in a Quick Settings tile or under GNOME's volume\n• Individual/combined control\n• Easy to get started: https://github.com/samuelcecilio/multi-display-adjustment#installation-of-ddcutil-service\n\nDDC/CI backend by Maciej Wójcik: https://gitlab.com/w8jcik/display-adjustment",
   "uuid": "multi-display-adjustment@cecilio.xyz",
   "url": "https://github.com/samuelcecilio/multi-display-adjustment",
   "shell-version": [ "46", "47", "48", "49", "50" ],
