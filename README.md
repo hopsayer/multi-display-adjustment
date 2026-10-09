@@ -19,8 +19,7 @@ Extension relies on `ddcutil-service`. Installation process of `ddcutil-service`
 
 * **Tile** (the default, left above) — a single _Displays_ entry in Quick Settings opens a menu
   where every display has a brightness and a contrast slider, each with its level as a number from
-  0 to 100. The entry shows the name of the display, or how many there are, and is hidden when
-  there are none.
+  0 to 100. The entry is hidden when there are no displays.
 * **Inline** (right above) — no tile: every display gets a brightness slider among the sliders of
   Quick Settings, right next to the brightness slider of GNOME, or below the volume sliders on a
   desktop, which has none. They look and behave like the slider of GNOME. Only brightness is shown

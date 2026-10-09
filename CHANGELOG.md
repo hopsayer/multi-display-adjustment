@@ -8,15 +8,19 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
-## Unreleased
+## 1.4.2 (2026-10-09)
 
 ### Changed
 
-* The tile in Quick Settings shows only its title, _Displays_, like the tiles around it. The
-  subtitle with the name of the display, or the number of displays, is gone: monitor names are long
-  and were cut off with an ellipsis. The menu of the tile still names every display.
-* The description of the extension no longer says the sliders next to the brightness slider of
-  GNOME are only offered on GNOME 50.
+* The tile in Quick Settings shows only its title, _Displays_. The subtitle with the name of the
+  display, or the number of displays, is gone: monitor names are long and were cut off with an
+  ellipsis. The menu of the tile still names every display ([#31]).
+* The description of the extension is now a short list of features, and no longer says the sliders
+  next to the brightness slider of GNOME are only offered on GNOME 50 ([#25], [#30]).
+
+[#25]: https://github.com/samuelcecilio/multi-display-adjustment/pull/25
+[#30]: https://github.com/samuelcecilio/multi-display-adjustment/pull/30
+[#31]: https://github.com/samuelcecilio/multi-display-adjustment/pull/31
 
 ## 1.4.1 (2026-10-07)
 
