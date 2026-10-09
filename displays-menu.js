@@ -10,7 +10,7 @@ import St from 'gi://St'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js'
 
-import { gettext as _, ngettext } from 'resource:///org/gnome/shell/extensions/extension.js'
+import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
 import { QuickMenuToggle } from 'resource:///org/gnome/shell/ui/quickSettings.js'
 import { Slider } from 'resource:///org/gnome/shell/ui/slider.js'
 
@@ -194,12 +194,6 @@ class DisplaysToggle extends QuickMenuToggle {
         }
 
         this.visible = this._displays.length > 0
-
-        if (this._displays.length === 1) {
-            this.subtitle = this._displays[0].name
-        } else {
-            this.subtitle = ngettext('%d display', '%d displays', this._displays.length).format(this._displays.length)
-        }
     }
 
     _addDisplay(display, showContrast) {

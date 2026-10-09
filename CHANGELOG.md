@@ -12,6 +12,9 @@ repository — use `git log` and `git blame` for per-line authorship.
 
 ### Changed
 
+* The tile in Quick Settings shows only its title, _Displays_, like the tiles around it. The
+  subtitle with the name of the display, or the number of displays, is gone: monitor names are long
+  and were cut off with an ellipsis. The menu of the tile still names every display.
 * The description of the extension no longer says the sliders next to the brightness slider of
   GNOME are only offered on GNOME 50.
 
