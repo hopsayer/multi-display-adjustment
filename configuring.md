@@ -1,9 +1,9 @@
 ## Two ways to show the sliders
 
-* **Tile** (default, see the screenshot) — a single _Displays_ entry in Quick Settings opens a menu
+* **Tile** (default, see the screenshot in the README) — a single _Displays_ entry in Quick Settings opens a menu
   where every display has a brightness and a contrast slider, each with its level as a number from
   0 to 100. The entry is hidden when there are no displays.
-* **Inline** (see the screenshot) — no tile: every display gets a brightness slider among the sliders of
+* **Inline** (see the same screenshot) — no tile: every display gets a brightness slider among the sliders of
   Quick Settings, right next to the brightness slider of GNOME, or below the volume sliders on a
   desktop, which has none. They look and behave like the slider of GNOME. Only brightness is shown
   this way.
