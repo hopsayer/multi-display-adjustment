@@ -33,7 +33,7 @@ The short version is in the [README](./README.md#installation). This page has wh
 
 ## Install from a release
 
-A new version shows up there once it passes review. To install a release before that, grab the
+A new version shows up on extensions.gnome.org once it passes review. To install a release before that, grab the
 `.shell-extension.zip` of the
 [latest release](https://github.com/samuelcecilio/multi-display-adjustment/releases/latest) and
 

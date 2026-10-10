@@ -54,31 +54,33 @@ gsettings --schemadir ~/.local/share/gnome-shell/extensions/multi-display-adjust
 
 ## Installation
 
+Install _ddcutil-service_ first, then the extension.
+
+### Installation of _ddcutil-service_
+
+* **Arch Linux** — [from the AUR](https://aur.archlinux.org/packages/ddcutil-service), for example `yay -S ddcutil-service`
+* **openSUSE** — `sudo zypper install ddcutil-service`
+* **Debian 12 and 13, Ubuntu 24.04 to 26.04** — unofficial `amd64` packages by Maciej Wójcik
+
+  ```bash
+  . /etc/os-release
+  wget -O /tmp/ddcutil-service.deb "https://gitlab.com/api/v4/projects/w8jcik%2fddcutil-service.deb/packages/generic/${ID^}-${VERSION_ID}/1.0.14/ddcutil-service_1.0.14+${VERSION_CODENAME}-amd64.deb"
+  sudo apt install /tmp/ddcutil-service.deb
+  ```
+
+* **Fedora and any other** — [build it from source](./installation.md#build-ddcutil-service-from-source)
+
+Usually nothing else has to be set up for the displays to be reachable. If the sliders do not show
+up, see [Access to the displays](./installation.md#access-to-the-displays).
+
+### Installation of the extension
+
 Install it from
 [extensions.gnome.org](https://extensions.gnome.org/extension/10707/multi-display-adjustment/), in
-the browser or with an app such as Extension Manager. It also needs _ddcutil-service_, see
-[below](#installation-of-ddcutil-service).
+the browser or with an app such as Extension Manager.
 
-Other ways to install the extension, for example from a release before it passes review, are in
+A new version shows up there once it passes review. To get the newest one before that, see
 [Install from a release](./installation.md#install-from-a-release).
-
-## Installation of _ddcutil-service_
-
-`ddcutil-service` can be installed from a package or built and installed from the source code.
-
-### From a package
-
-* [Ubuntu and Debian packages](https://gitlab.com/w8jcik/ddcutil-service.deb)
-* [Arch AUR package](https://aur.archlinux.org/packages/ddcutil-service)
-* [OpenSUSE packages](https://software.opensuse.org/package/ddcutil-service)
-
-### Build by yourself
-
-See [Build `ddcutil-service` from source](./installation.md#build-ddcutil-service-from-source).
-
-### Access to the displays
-
-See [Access to the displays](./installation.md#access-to-the-displays).
 
 # Troubleshooting
 
