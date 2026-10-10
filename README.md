@@ -13,14 +13,14 @@ own screen.
 
 ## Installation
 
-### Dependencies
+### 0. Dependencies
 
 * GNOME 46-50
 * [_ddcutil-service_](https://github.com/digitaltrails/ddcutil-service), allows more responsive communication with the displays than calling `ddcutil`.
 
 Install _ddcutil-service_ first, then the extension.
 
-### Installation of _ddcutil-service_
+### 1. Installation of _ddcutil-service_
 
 * **Arch Linux** — [from the AUR](https://aur.archlinux.org/packages/ddcutil-service), for example `yay -S ddcutil-service`
 * **openSUSE** — `sudo zypper install ddcutil-service`
@@ -37,7 +37,7 @@ Install _ddcutil-service_ first, then the extension.
 Usually nothing else has to be set up for the displays to be reachable. If the sliders do not show
 up, see [Access to the displays](./installation.md#access-to-the-displays).
 
-### Installation of the extension
+### 2. Installation of the extension
 
 Install it from
 [extensions.gnome.org](https://extensions.gnome.org/extension/10707/multi-display-adjustment/), in
