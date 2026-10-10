@@ -21,13 +21,15 @@ The short version is in the [README](./README.md#installation). This page has wh
 2. __Build and install the service__
 
    ```bash
-   git clone --branch v1.0.14 https://github.com/digitaltrails/ddcutil-service.git
+   git clone --branch v1.0.15 https://github.com/digitaltrails/ddcutil-service.git
    cd ddcutil-service
    make
    make install
    ```
 
    Service installs to `~/.local/share/dbus-1/services/com.ddcutil.DdcutilService.service` and  `~/.local/bin/ddcutil-service`. It is activated after the next login. You might have to reboot for `ddcutil` to detect your display.
+
+   The packages for Debian and Ubuntu linked from the README are built from `1.0.14`. The methods the extension uses are the same in both versions.
 
 ## Install from a release
 
