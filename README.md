@@ -1,17 +1,14 @@
 # Multi Display Adjustment GNOME shell extension
 
+> Originally based on [display-adjustment](https://gitlab.com/w8jcik/display-adjustment) by Maciej Wójcik.
+> Details: [CHANGELOG.md](./CHANGELOG.md).
+
 Offers sliders in Quick Settings to control the brightness and contrast of external displays
 through DDC/CI, one set per display, under the display name that Settings shows. Moving a slider
 shows the level in the on-screen display of the screens it adjusts, as GNOME does for a laptop's
 own screen.
 
 ![The sliders in the tile, left, and inline, right](./screenshot.png)
-
-> **This is a fork of [w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment)** by Maciej Wójcik,
-> focused on multi-monitor setups. All credit for the original extension goes to the upstream author;
-> see the git history for authorship of individual changes and [CHANGELOG.md](./CHANGELOG.md) for how this
-> fork diverges. It installs under a different UUID, so it can coexist with the original — but running
-> both at once will give you duplicate sliders.
 
 Extension relies on `ddcutil-service`. Installation process of `ddcutil-service` is quick and non-intrusive. `ddcutil-service` allows more responsive communication with the displays than calling `ddcutil`.
 
