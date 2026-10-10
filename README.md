@@ -18,8 +18,6 @@ own screen.
 * GNOME 46-50
 * [_ddcutil-service_](https://github.com/digitaltrails/ddcutil-service), allows more responsive communication with the displays than calling `ddcutil`.
 
-Install _ddcutil-service_ first, then the extension.
-
 ### 1. Installation of _ddcutil-service_
 
 * **Arch Linux** — [from the AUR](https://aur.archlinux.org/packages/ddcutil-service), for example `yay -S ddcutil-service`
@@ -46,7 +44,13 @@ the browser or with an app such as Extension Manager.
 A new version shows up there once it passes review. To get the newest one before that, see
 [Install from a release](./installation.md#install-from-a-release).
 
-# Troubleshooting
+# See more
+
+## Using
+
+* [Configuring](./configuring.md)
+
+## Troubleshooting
 
 * [Diagnosing issues](./troubleshooting.md#diagnosing-issues)
 * [Known issues](./troubleshooting.md#known-issues)
