@@ -5,10 +5,13 @@
 import Gio from 'gi://Gio'
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
+import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js'
 
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import { devLog } from './code-convenience.js'
+
+const INSTALLATION_URL = 'https://github.com/samuelcecilio/multi-display-adjustment#1-installation-of-ddcutil-service'
 
 class DdcutilService {
     /**
@@ -73,16 +76,42 @@ class DdcutilService {
 
     _notifyUnavailable() {
         // Displays change often, the user only needs to be told once
-        if (this._notifiedUnavailable) {
+        if (this._notifiedUnavailable || this._destroyed) {
             return
         }
 
         this._notifiedUnavailable = true
 
-        Main.notify(
-            _('Multi Display Adjustment'),
-            _('ddcutil-service is not available or failed to start. Install ddcutil-service and log in again to get the brightness and contrast sliders, or disable the Multi Display Adjustment extension.')
-        )
+        const source = new MessageTray.Source({
+            title: _('Multi Display Adjustment'),
+            iconName: 'video-display-symbolic',
+        })
+
+        source.connect('destroy', () => {
+            this._notificationSource = null
+        })
+
+        Main.messageTray.add(source)
+        this._notificationSource = source
+
+        const notification = new MessageTray.Notification({
+            source,
+            title: _('Multi Display Adjustment'),
+            body: _('ddcutil-service is not available or failed to start. Install it and log in again to get the brightness and contrast sliders.'),
+        })
+
+        notification.addAction(_('Open instructions'), () => {
+            Gio.AppInfo.launch_default_for_uri(INSTALLATION_URL, global.create_app_launch_context(0, -1))
+        })
+
+        source.addNotification(notification)
+    }
+
+    destroy() {
+        this._destroyed = true
+
+        this._notificationSource?.destroy()
+        this._notificationSource = null
     }
 
     /**

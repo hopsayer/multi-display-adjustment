@@ -163,6 +163,7 @@ export default class DisplaysAdjustmentsExtension extends Extension {
         this._inline = null
 
         this._displayConfigService = null
+        this._ddcutilService.destroy()
         this._ddcutilService = null
 
         this._displays = []
