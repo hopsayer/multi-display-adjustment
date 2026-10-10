@@ -1,5 +1,6 @@
 # Multi Display Adjustment GNOME shell extension
 
+> [!TIP]
 > Originally based on [display-adjustment](https://gitlab.com/w8jcik/display-adjustment) by Maciej Wójcik.
 > Details: [CHANGELOG.md](./CHANGELOG.md).
 
