@@ -2,6 +2,7 @@
 
 > [!TIP]
 > Originally based on [display-adjustment](https://gitlab.com/w8jcik/display-adjustment) by Maciej Wójcik.
+> 
 > Details: [CHANGELOG.md](./CHANGELOG.md).
 
 Offers sliders in Quick Settings to control the brightness and contrast of external displays
@@ -16,9 +17,9 @@ own screen.
 ### 0. Dependencies
 
 * GNOME 46-50
-* [_ddcutil-service_](https://github.com/digitaltrails/ddcutil-service), allows more responsive communication with the displays than calling `ddcutil`.
+* [ddcutil-service](https://github.com/digitaltrails/ddcutil-service), allows more responsive communication with the displays than calling `ddcutil`.
 
-### 1. Installation of _ddcutil-service_
+### 1. Installation of ddcutil-service
 
 * **Arch Linux** — [from the AUR](https://aur.archlinux.org/packages/ddcutil-service), for example `yay -S ddcutil-service`
 * **openSUSE** — `sudo zypper install ddcutil-service`
