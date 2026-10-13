@@ -21,9 +21,9 @@ own screen.
 
 ### 1. Installation of ddcutil-service
 
-* **Arch Linux** — [from the AUR](https://aur.archlinux.org/packages/ddcutil-service), for example `yay -S ddcutil-service`
+* **Arch Linux** — `yay -S ddcutil-service`
 * **openSUSE** — `sudo zypper install ddcutil-service`
-* **Debian 12 and 13, Ubuntu 24.04 to 26.04** — unofficial `amd64` packages by Maciej Wójcik
+* **Debian 12 and 13, Ubuntu 24.04 to 26.04** — unofficial `amd64` packages by Maciej Wójcik:
 
   ```bash
   . /etc/os-release
