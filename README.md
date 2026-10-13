@@ -26,7 +26,7 @@ own screen.
 * **Debian 12 and 13, Ubuntu 24.04 to 26.04** — unofficial `amd64` packages by Maciej Wójcik:
 
   ```bash
-  . /etc/os-release
+  . /etc/os-release # Read variables containing info about distro from "/etc/os-release" file to use them in next command
   wget -O /tmp/ddcutil-service.deb "https://gitlab.com/api/v4/projects/w8jcik%2fddcutil-service.deb/packages/generic/${ID^}-${VERSION_ID}/1.0.14/ddcutil-service_1.0.14+${VERSION_CODENAME}-amd64.deb"
   sudo apt install /tmp/ddcutil-service.deb
   ```
