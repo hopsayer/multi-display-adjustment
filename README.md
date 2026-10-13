@@ -17,7 +17,7 @@ own screen.
 ### 0. Dependencies
 
 * GNOME 46-50
-* [ddcutil-service](https://github.com/digitaltrails/ddcutil-service), allows more responsive communication with the displays than calling `ddcutil`.
+* [ddcutil-service](https://github.com/digitaltrails/ddcutil-service) (allows responsive communication with the displays compared to calling `ddcutil`)
 
 ### 1. Installation of ddcutil-service
 
