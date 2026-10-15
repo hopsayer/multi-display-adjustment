@@ -30,6 +30,8 @@ own screen.
   sudo apt install /tmp/ddcutil-service.deb
   ```
 
+  Other packages and instructions: [w8jcik/ddcutil-service.deb](https://gitlab.com/w8jcik/ddcutil-service.deb).
+
 * **Fedora** — from the [COPR repository](https://copr.fedorainfracloud.org/coprs/hopsayer/ddcutil-service/):
 
   ```bash
