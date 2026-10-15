@@ -30,7 +30,14 @@ own screen.
   sudo apt install /tmp/ddcutil-service.deb
   ```
 
-* **Fedora and any other** — [build it from source](./installation.md#build-ddcutil-service-from-source)
+* **Fedora** — from the [COPR repository](https://copr.fedorainfracloud.org/coprs/hopsayer/ddcutil-service/):
+
+  ```bash
+  sudo dnf copr enable hopsayer/ddcutil-service
+  sudo dnf install ddcutil-service
+  ```
+
+* **Any other** — [build it from source](./installation.md#build-ddcutil-service-from-source)
 
 Usually nothing else has to be set up for the displays to be reachable. If the sliders do not show
 up, see [Access to the displays](./installation.md#access-to-the-displays).
