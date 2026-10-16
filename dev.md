@@ -19,21 +19,22 @@ make link
 ```
 
 Edits in the working tree are picked up by the next shell restart, with no need to rebuild.
-`make link` compiles `schemas/` first: `getSettings()` looks for `schemas/gschemas.compiled` in
-the extension directory, which for a symlink is this working tree. Re-run `make schemas` after
+`make link` links `src/`, the part of the working tree that is the extension, and compiles
+`src/schemas/` first: `getSettings()` looks for `schemas/gschemas.compiled` in the extension
+directory, which for a symlink is `src/`. Re-run `make schemas` after
 changing a `.gschema.xml` file.
 
 The compiled schema can also be exercised without logging out:
 
 ```bash
-gsettings --schemadir schemas set org.gnome.shell.extensions.multi-display-adjustment group-displays true
-gsettings --schemadir schemas set org.gnome.shell.extensions.multi-display-adjustment show-contrast false
+gsettings --schemadir src/schemas set org.gnome.shell.extensions.multi-display-adjustment group-displays true
+gsettings --schemadir src/schemas set org.gnome.shell.extensions.multi-display-adjustment show-contrast false
 ```
 
 > [!WARNING]
 > While this symlink exists, never run `gnome-extensions install --force`. It empties the extension
 > directory before unpacking and follows the symlink while doing so, which **deletes the contents of
-> the working tree**. `make install` checks for the symlink and refuses to run, but the plain
+> `src/`**. `make install` checks for the symlink and refuses to run, but the plain
 > `gnome-extensions` command does not.
 >
 > A symlinked extension does not show up in `gnome-extensions list`, so check with `make status` or

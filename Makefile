@@ -1,10 +1,10 @@
 UUID = multi-display-adjustment@cecilio.xyz
 
-SOURCE_DIR = $(CURDIR)
+SOURCE_DIR = $(CURDIR)/src
 INSTALL_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
-JS_SOURCES = $(wildcard *.js)
-SCHEMAS_DIR = schemas
+JS_SOURCES = $(wildcard src/*.js)
+SCHEMAS_DIR = src/schemas
 SCHEMAS_COMPILED = $(SCHEMAS_DIR)/gschemas.compiled
 PACKAGE = dist/$(UUID).shell-extension.zip
 
