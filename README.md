@@ -10,7 +10,7 @@ through DDC/CI, one set per display, under the display name that Settings shows.
 shows the level in the on-screen display of the screens it adjusts, as GNOME does for a laptop's
 own screen.
 
-![Tile and inline modes](./screenshot.png)
+![Tile and inline modes](./docs/screenshot.png)
 
 ## Installation
 
@@ -43,7 +43,7 @@ own screen.
 * **Any other** — [build it from source](./installation.md#build-ddcutil-service-from-source)
 
 Usually nothing else has to be set up for the displays to be reachable. If the sliders do not show
-up, see [Access to the displays](./installation.md#access-to-the-displays).
+up, see [Access to the displays](./docs/installation.md#access-to-the-displays).
 
 ### 2. Installation of the extension
 
@@ -52,18 +52,18 @@ Install it from
 the browser or with an app such as Extension Manager.
 
 A new version shows up there once it passes review. To get the newest one before that, see
-[Install from a release](./installation.md#install-from-a-release).
+[Install from a release](./docs/installation.md#install-from-a-release).
 
 # See more
 
 ## Using
 
-* [Configuring](./configuring.md)
+* [Configuring](./docs/configuring.md)
 
 ## Troubleshooting
 
-* [Diagnosing issues](./troubleshooting.md#diagnosing-issues)
-* [Known issues](./troubleshooting.md#known-issues)
+* [Diagnosing issues](./docs/troubleshooting.md#diagnosing-issues)
+* [Known issues](./docs/troubleshooting.md#known-issues)
 
 # Thanks
 
