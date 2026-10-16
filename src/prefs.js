@@ -5,10 +5,7 @@ import Adw from 'gi://Adw'
 import Gio from 'gi://Gio'
 import Gtk from 'gi://Gtk'
 
-import * as Config from 'resource:///org/gnome/Shell/Extensions/js/misc/config.js'
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
-
-import { supportsInline } from './inline-support.js'
 
 
 // In the order of the choices in the enums of the slider-placement and inline-position keys
@@ -73,48 +70,45 @@ export default class MultiDisplayAdjustmentPreferences extends ExtensionPreferen
 
         const syncContrast = bindSwitch(window, settings, 'show-contrast', showContrast)
 
-        // The inline sliders only work on some shell versions, elsewhere there is nothing to choose
-        if (supportsInline(Config.PACKAGE_VERSION)) {
-            const placement = new Adw.ComboRow({
-                title: _('Placement'),
-                subtitle: _('Inline means among other Quick Settings sliders'),
-                model: Gtk.StringList.new([_('Tile'), _('Inline')])
-            })
+        const placement = new Adw.ComboRow({
+            title: _('Placement'),
+            subtitle: _('Inline means among other Quick Settings sliders'),
+            model: Gtk.StringList.new([_('Tile'), _('Inline')])
+        })
 
-            const positionSubtitle = _('Relative to GNOME\'s laptop display slider. No effect on PC.')
+        const positionSubtitle = _('Relative to GNOME\'s laptop display slider. No effect on PC.')
 
-            const position = new Adw.ComboRow({
-                title: _('Position'),
-                subtitle: positionSubtitle,
-                model: Gtk.StringList.new([_('Below'), _('Above')])
-            })
+        const position = new Adw.ComboRow({
+            title: _('Position'),
+            subtitle: positionSubtitle,
+            model: Gtk.StringList.new([_('Below'), _('Above')])
+        })
 
-            const syncPlacement = () => {
-                const current = settings.get_string('slider-placement')
+        const syncPlacement = () => {
+            const current = settings.get_string('slider-placement')
 
-                placement.selected = PLACEMENTS.indexOf(current)
-                position.selected = POSITIONS.indexOf(settings.get_string('inline-position'))
-                position.sensitive = current === 'inline'
-                position.subtitle = current === 'inline' ? positionSubtitle : _('Not available with tile placement')
-                showContrast.sensitive = current === 'tile'
-                syncContrast()
+            placement.selected = PLACEMENTS.indexOf(current)
+            position.selected = POSITIONS.indexOf(settings.get_string('inline-position'))
+            position.sensitive = current === 'inline'
+            position.subtitle = current === 'inline' ? positionSubtitle : _('Not available with tile placement')
+            showContrast.sensitive = current === 'tile'
+            syncContrast()
 
-                // A greyed out switch alone is easy to miss, so say why it is
-                showContrast.subtitle = current === 'tile' ? '' : _('Not available with inline placement')
-            }
-
-            syncPlacement()
-
-            placement.connect('notify::selected', () => settings.set_string('slider-placement', PLACEMENTS[placement.selected]))
-            position.connect('notify::selected', () => settings.set_string('inline-position', POSITIONS[position.selected]))
-
-            const changedIds = ['slider-placement', 'inline-position']
-                .map(key => settings.connect(`changed::${key}`, syncPlacement))
-            window.connect('close-request', () => changedIds.forEach(id => settings.disconnect(id)))
-
-            group.add(placement)
-            group.add(position)
+            // A greyed out switch alone is easy to miss, so say why it is
+            showContrast.subtitle = current === 'tile' ? '' : _('Not available with inline placement')
         }
+
+        syncPlacement()
+
+        placement.connect('notify::selected', () => settings.set_string('slider-placement', PLACEMENTS[placement.selected]))
+        position.connect('notify::selected', () => settings.set_string('inline-position', POSITIONS[position.selected]))
+
+        const changedIds = ['slider-placement', 'inline-position']
+            .map(key => settings.connect(`changed::${key}`, syncPlacement))
+        window.connect('close-request', () => changedIds.forEach(id => settings.disconnect(id)))
+
+        group.add(placement)
+        group.add(position)
 
         const limitMinimum = new Adw.SwitchRow({
             title: _('Minimum brightness of 1%'),

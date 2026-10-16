@@ -44,7 +44,6 @@ EXTRA_SOURCES=(
     displays-menu.js
     icons
     inline-sliders.js
-    inline-support.js
     mock-loader.js
     vcp-controller.js
 )
