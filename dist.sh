@@ -6,6 +6,10 @@
 #   ./dist.sh            builds dist/multi-display-adjustment@cecilio.xyz.shell-extension.zip
 #   ./dist.sh --install  builds it and installs it for the current user
 #
+# With MOCK_DISPLAYS_NUMBER=N it builds a development package that has N mock
+# displays instead of the real ones, as dist/$UUID-mock.shell-extension.zip, see
+# "Mock displays" in dev.md. That one is never what is published.
+#
 # The same script runs in CI, so the published package is the one built here.
 
 set -euo pipefail
@@ -14,13 +18,15 @@ UUID=multi-display-adjustment@cecilio.xyz
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT_DIR="$ROOT_DIR/dist"
+MOCK_DISPLAYS_NUMBER="${MOCK_DISPLAYS_NUMBER:-}"
 PACKAGE="$OUT_DIR/$UUID.shell-extension.zip"
 INSTALL_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions/$UUID"
 
 # The extension is src/, and the license next to it in the root is added to the
 # package from a copy, so that the tool sees everything in one directory.
 STAGE_DIR="$(mktemp -d)"
-trap 'rm -rf "$STAGE_DIR"' EXIT
+MOCK_OUT_DIR=""
+trap 'rm -rf "$STAGE_DIR" "$MOCK_OUT_DIR"' EXIT
 
 cp -r "$ROOT_DIR/src/." "$STAGE_DIR/"
 cp "$ROOT_DIR/COPYING" "$STAGE_DIR/"
@@ -51,7 +57,33 @@ done
 
 mkdir -p "$OUT_DIR"
 
-gnome-extensions pack --force --out-dir="$OUT_DIR" "${extra_source_arguments[@]}" "$STAGE_DIR"
+if [[ -z "$MOCK_DISPLAYS_NUMBER" ]]; then
+    gnome-extensions pack --force --out-dir="$OUT_DIR" "${extra_source_arguments[@]}" "$STAGE_DIR"
+else
+    if [[ ! "$MOCK_DISPLAYS_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+        echo "MOCK_DISPLAYS_NUMBER must be a whole number above 0, not '$MOCK_DISPLAYS_NUMBER'" >&2
+
+        exit 1
+    fi
+
+    PACKAGE="$OUT_DIR/$UUID-mock.shell-extension.zip"
+    MOCK_OUT_DIR="$(mktemp -d)"
+
+    # The copy is the one place where the mock files are put, so the working
+    # tree stays as it is and never has them in place of the real ones.
+    cp "$ROOT_DIR/dev/mock-loader.js" "$STAGE_DIR/mock-loader.js"
+    cp "$ROOT_DIR/dev/mock-services.js" "$STAGE_DIR/"
+    printf '{ "displays": %s }\n' "$MOCK_DISPLAYS_NUMBER" > "$STAGE_DIR/mock.json"
+
+    # So that it cannot be taken for the real one in the list of extensions
+    sed -i -E 's/^([[:space:]]*"name"[[:space:]]*:[[:space:]]*"[^"]*)"/\1 (mock)"/' "$STAGE_DIR/metadata.json"
+    grep -q '"name".*(mock)"' "$STAGE_DIR/metadata.json"
+
+    gnome-extensions pack --force --out-dir="$MOCK_OUT_DIR" "${extra_source_arguments[@]}" \
+        --extra-source=mock-services.js --extra-source=mock.json "$STAGE_DIR"
+
+    mv "$MOCK_OUT_DIR/$UUID.shell-extension.zip" "$PACKAGE"
+fi
 
 echo "Packed $PACKAGE"
 
