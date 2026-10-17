@@ -12,10 +12,19 @@ set -euo pipefail
 
 UUID=multi-display-adjustment@cecilio.xyz
 
-SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUT_DIR="$SOURCE_DIR/dist"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+OUT_DIR="$ROOT_DIR/dist"
 PACKAGE="$OUT_DIR/$UUID.shell-extension.zip"
 INSTALL_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions/$UUID"
+
+# The extension is src/, and the license next to it in the root is added to the
+# package from a copy, so that the tool sees everything in one directory.
+STAGE_DIR="$(mktemp -d)"
+trap 'rm -rf "$STAGE_DIR"' EXIT
+
+cp -r "$ROOT_DIR/src/." "$STAGE_DIR/"
+cp "$ROOT_DIR/COPYING" "$STAGE_DIR/"
+rm -f "$STAGE_DIR/schemas/gschemas.compiled"
 
 # metadata.json, extension.js, prefs.js and stylesheet.css are picked up
 # automatically, and schemas/*.gschema.xml is compiled into the package.
@@ -41,7 +50,7 @@ done
 
 mkdir -p "$OUT_DIR"
 
-gnome-extensions pack --force --out-dir="$OUT_DIR" "${extra_source_arguments[@]}" "$SOURCE_DIR"
+gnome-extensions pack --force --out-dir="$OUT_DIR" "${extra_source_arguments[@]}" "$STAGE_DIR"
 
 echo "Packed $PACKAGE"
 
@@ -50,7 +59,7 @@ if [[ "${1:-}" == "--install" ]]; then
     # unpacking, and it follows a symlink while doing so. With the development
     # symlink from dev.md in place, that empties the working tree instead.
     if [[ -L "$INSTALL_DIR" ]]; then
-        echo "Refusing to install: $INSTALL_DIR is a symlink, most likely to a working tree." >&2
+        echo "Refusing to install: $INSTALL_DIR is a symlink, most likely to src/ of a working tree." >&2
         echo "Installing over it would delete the contents of $(readlink -f "$INSTALL_DIR")." >&2
         echo "Remove the symlink first: rm '$INSTALL_DIR'" >&2
 

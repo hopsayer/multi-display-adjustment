@@ -1,10 +1,10 @@
 UUID = multi-display-adjustment@cecilio.xyz
 
-SOURCE_DIR = $(CURDIR)
+SOURCE_DIR = $(CURDIR)/src
 INSTALL_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
-JS_SOURCES = $(wildcard *.js)
-SCHEMAS_DIR = schemas
+JS_SOURCES = $(wildcard src/*.js)
+SCHEMAS_DIR = src/schemas
 SCHEMAS_COMPILED = $(SCHEMAS_DIR)/gschemas.compiled
 PACKAGE = dist/$(UUID).shell-extension.zip
 
@@ -109,7 +109,7 @@ check:
 # Shexli is what extensions.gnome.org runs on an uploaded package. It exits
 # with 0 even when it reports findings, so its summary line is checked.
 lint: pack
-	@command -v $(firstword $(SHEXLI)) >/dev/null || { echo "$(firstword $(SHEXLI)) not found, see dev.md" >&2; exit 1; }
+	@command -v $(firstword $(SHEXLI)) >/dev/null || { echo "$(firstword $(SHEXLI)) not found, see docs/dev.md" >&2; exit 1; }
 	@output="$$($(SHEXLI) $(PACKAGE))" || { echo "$$output"; exit 1; }; \
 	echo "$$output"; \
 	echo "$$output" | grep -q '^shexli: clean'

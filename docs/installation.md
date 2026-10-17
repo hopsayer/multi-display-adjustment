@@ -1,6 +1,6 @@
 # Installation, in detail
 
-The short version is in the [README](./README.md#installation). This page has what does not fit there.
+The short version is in the [README](../README.md#installation). This page has what does not fit there.
 
 ## Build `ddcutil-service` from source
 

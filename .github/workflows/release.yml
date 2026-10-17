@@ -26,10 +26,10 @@ jobs:
       - name: Check that the tag matches metadata.json
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          version="$(jq -r '.["version-name"]' metadata.json)"
+          version="$(jq -r '.["version-name"]' src/metadata.json)"
 
           if [[ "$GITHUB_REF_NAME" != "v$version" ]]; then
-            echo "Tag $GITHUB_REF_NAME does not match version-name $version in metadata.json" >&2
+            echo "Tag $GITHUB_REF_NAME does not match version-name $version in src/metadata.json" >&2
             exit 1
           fi
 
