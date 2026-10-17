@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install gnome-extensions
         # The packaging tool ships with GNOME Shell itself, so that the package
@@ -36,7 +36,7 @@ jobs:
       - name: Build the package
         run: ./dist.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: shell-extension
           path: dist/*.shell-extension.zip
