@@ -8,17 +8,20 @@ at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 
-## Unreleased
+## 1.5.0 (2026-10-17)
 
 ### Added
 
 * GNOME 51 support, with the inline sliders too. Left and Right still move the sliders of the tile
-  there, where they would otherwise do nothing.
+  there, where they would otherwise do nothing ([#27]).
 
 ### Changed
 
 * The notification shown when ddcutil-service is not installed now has an _Open instructions_ button
-  that opens its installation in the README, and no longer tells to disable the extension.
+  that opens its installation in the README, and no longer tells to disable the extension ([#36]).
+
+[#27]: https://github.com/samuelcecilio/multi-display-adjustment/pull/27
+[#36]: https://github.com/samuelcecilio/multi-display-adjustment/pull/36
 
 ## 1.4.2 (2026-10-09)
 
