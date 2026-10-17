@@ -3,10 +3,13 @@ UUID = multi-display-adjustment@cecilio.xyz
 SOURCE_DIR = $(CURDIR)/src
 INSTALL_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
-JS_SOURCES = $(wildcard src/*.js)
+JS_SOURCES = $(wildcard src/*.js dev/*.js)
 SCHEMAS_DIR = src/schemas
 SCHEMAS_COMPILED = $(SCHEMAS_DIR)/gschemas.compiled
 PACKAGE = dist/$(UUID).shell-extension.zip
+MOCK_PACKAGE = dist/$(UUID)-mock.shell-extension.zip
+
+NESTED_SHELL = gnome-shell --headless --virtual-monitor 1920x1080 --virtual-monitor 1280x1024
 
 # tree-sitter 0.26 makes shexli 0.2.1 crash with a segmentation fault
 SHEXLI ?= uvx --with 'tree-sitter<0.26' shexli
@@ -31,6 +34,9 @@ help:
 	@echo "  make nested     start a throwaway shell to catch startup errors"
 	@echo "  make schemas    compile GSettings schemas for a symlink install"
 	@echo "  make logs       follow the shell log"
+	@echo ""
+	@echo "pack, install and nested with MOCK_DISPLAYS_NUMBER=N use N mock displays instead of the"
+	@echo "real ones, in a package of their own, see \"Mock displays\" in dev.md"
 
 pack:
 	./dist.sh
@@ -118,7 +124,18 @@ lint: pack
 # show up in it. It is for seeing whether the extension starts without errors.
 # The compiled schema is required: getSettings() throws if it is missing.
 nested: schemas
-	dbus-run-session -- gnome-shell --headless --virtual-monitor 1920x1080 --virtual-monitor 1280x1024
+	@if [ -z "$(MOCK_DISPLAYS_NUMBER)" ]; then \
+	    dbus-run-session -- $(NESTED_SHELL); \
+	else \
+	    ./dist.sh > /dev/null || exit 1; \
+	    data="$$(mktemp -d)"; \
+	    trap 'rm -rf "$$data"' EXIT; \
+	    extension="$$data/gnome-shell/extensions/$(UUID)"; \
+	    mkdir -p "$$extension"; \
+	    unzip -q $(MOCK_PACKAGE) -d "$$extension"; \
+	    glib-compile-schemas --strict "$$extension/schemas"; \
+	    XDG_DATA_HOME="$$data" dbus-run-session -- $(NESTED_SHELL); \
+	fi
 
 logs:
 	journalctl --user -f -o cat /usr/bin/gnome-shell

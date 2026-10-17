@@ -20,6 +20,7 @@ import { DdcutilService } from './ddcutil-service.js'
 import { pairDisplays } from './display-pairing.js'
 import { InlineSliders } from './inline-sliders.js'
 import { supportsInline } from './inline-support.js'
+import { installMockServices } from './mock-loader.js'
 
 
 const DisplaysAdjustmentsIndicator = GObject.registerClass(
@@ -107,6 +108,9 @@ export default class DisplaysAdjustmentsExtension extends Extension {
     async _connectServices() {
         const displayConfigService = this._displayConfigService
         const ddcutilService = this._ddcutilService
+
+        // Development hook, which does nothing in a release. See "Mock displays" in dev.md.
+        installMockServices(displayConfigService, ddcutilService)
 
         await displayConfigService.init()
         await ddcutilService.init()
