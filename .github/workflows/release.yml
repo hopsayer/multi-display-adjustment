@@ -11,9 +11,7 @@ permissions:
 
 jobs:
   release:
-    # A fixed version rather than ubuntu-latest, so that the gnome-extensions
-    # that packs the release only changes on purpose. 26.04 has GNOME 50.
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
