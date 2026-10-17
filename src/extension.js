@@ -7,7 +7,6 @@
 
 import GObject from 'gi://GObject'
 
-import * as Config from 'resource:///org/gnome/shell/misc/config.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js'
 
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js'
@@ -19,7 +18,6 @@ import { DisplayConfigService } from './display-config-service.js'
 import { DdcutilService } from './ddcutil-service.js'
 import { pairDisplays } from './display-pairing.js'
 import { InlineSliders } from './inline-sliders.js'
-import { supportsInline } from './inline-support.js'
 import { installMockServices } from './mock-loader.js'
 
 
@@ -74,11 +72,10 @@ export default class DisplaysAdjustmentsExtension extends Extension {
     }
 
     /**
-     * Shows the sliders where the setting says. The inline ones are only used
-     * on the shell versions they were checked on, whatever the setting is.
+     * Shows the sliders where the setting says.
      */
     _applyPlacement() {
-        const inline = supportsInline(Config.PACKAGE_VERSION) && this._settings.get_string('slider-placement') === 'inline'
+        const inline = this._settings.get_string('slider-placement') === 'inline'
 
         if (this._view && inline === this._inline) {
             return

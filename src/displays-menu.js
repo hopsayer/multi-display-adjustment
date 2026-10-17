@@ -18,6 +18,9 @@ import { devLog } from './code-convenience.js'
 import { BRIGHTNESS_VCP_CODE, CONTRAST_VCP_CODE, minBrightness, VcpController } from './vcp-controller.js'
 
 
+// How far Left and Right move a slider, as for the sliders of GNOME
+const KEY_STEP = 0.1
+
 /**
  * A menu item with a slider bound to one VCP feature on one or more displays,
  * which a `VcpController` reads and writes. Moving the slider shows the level
@@ -101,12 +104,21 @@ class VcpSliderItem extends PopupMenu.PopupBaseMenuItem {
         this._controller.apply(this._slider.value)
     }
 
-    // Menu items would otherwise take Left and Right for navigation
+    /**
+     * Menu items would otherwise take Left and Right for navigation. Slider
+     * cannot be handed the keys, as since GNOME 51 it only reacts to them while
+     * it has the focus itself, so they move it here, by the same step.
+     */
     vfunc_key_press_event(event) {
         const key = event.get_key_symbol()
 
         if (key === Clutter.KEY_Left || key === Clutter.KEY_Right) {
-            return this._slider.vfunc_key_press_event(event)
+            const rtl = this.get_text_direction() === Clutter.TextDirection.RTL
+            const delta = (key === Clutter.KEY_Right) !== rtl ? KEY_STEP : -KEY_STEP
+
+            this._slider.value = Math.clamp(this._slider.value + delta, 0, this._slider.maximum_value)
+
+            return Clutter.EVENT_STOP
         }
 
         return super.vfunc_key_press_event(event)
