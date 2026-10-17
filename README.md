@@ -40,7 +40,7 @@ own screen.
   sudo dnf install ddcutil-service
   ```
 
-* **Any other** — [build it from source](./installation.md#build-ddcutil-service-from-source)
+* **Any other** — [build it from source](./docs/installation.md#build-ddcutil-service-from-source)
 
 Usually nothing else has to be set up for the displays to be reachable. If the sliders do not show
 up, see [Access to the displays](./docs/installation.md#access-to-the-displays).
