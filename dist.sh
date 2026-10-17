@@ -39,6 +39,7 @@ EXTRA_SOURCES=(
     icons
     inline-sliders.js
     inline-support.js
+    mock-loader.js
     vcp-controller.js
 )
 
