@@ -84,6 +84,48 @@ It runs GNOME Shell headless, because GNOME Shell 50 dropped both `--nested` and
 `make nested` compiles the GSettings schema first, because `getSettings()` throws if
 `schemas/gschemas.compiled` is missing.
 
+## Mock displays
+
+To try the sliders on a machine with no DDC/CI display, or in a virtual machine, build the
+extension with mock displays instead of the real ones:
+
+```bash
+make install MOCK_DISPLAYS_NUMBER=3
+```
+
+It builds `dist/multi-display-adjustment@cecilio.xyz-mock.shell-extension.zip` and installs it. In
+that package the extension uses three mock displays instead of what Mutter and ddcutil-service
+report, and it is called "Multi Display Adjustment (mock)". Their brightness and contrast live in
+memory, and every write is logged as `Mock display 1: VCP 0x10 set to 42`. The second display does
+not report contrast, so that a display without it is covered too.
+
+The mock files are put in a copy of `src/` while the package is built, so the working tree
+stays as it is, and `make pack`, `make install` and the release without the variable are built as
+before, with a mock-loader.js that does nothing. It does not work with `make link`, for the same
+reason, and `make install` refuses to install over the symlink.
+
+The number of displays is in `mock.json` in the extension directory, and it is read every time the
+extension is enabled, so it can be changed without building again or logging in again:
+
+```bash
+echo '{ "displays": 5 }' > ~/.local/share/gnome-shell/extensions/multi-display-adjustment@cecilio.xyz/mock.json
+gnome-extensions disable multi-display-adjustment@cecilio.xyz
+gnome-extensions enable multi-display-adjustment@cecilio.xyz
+```
+
+In a virtual machine, clone the repository there and run `make install MOCK_DISPLAYS_NUMBER=2`, or
+copy the package and run `gnome-extensions install --force` on it, then log out and back in and
+enable the extension. `make install` without the variable puts the real one back.
+
+`make nested MOCK_DISPLAYS_NUMBER=2` starts the headless shell of the previous section with the mock
+build in a temporary data directory, so the installed extension is not touched. That session has no
+screen to look at, so it shows that the extension starts and what it does with the displays, and to
+see the sliders, use a whole session as above.
+
+What the mock does not do: the connectors are made up, so no on-screen display appears, and displays
+are not plugged in or out while it runs. The extension also writes `external-display-count`, like it
+always does, to the settings of the user who runs it.
+
 ## Lint
 
 ```bash
