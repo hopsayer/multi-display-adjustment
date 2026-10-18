@@ -5,6 +5,13 @@
 This project forked from [w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment)
 at commit `d0857f0` ("Correct dependency range", 2026-04-07), which was released upstream as `0.0.8`.
 
+Copyright of the original work belongs to Maciej Wójcik and the contributors to
+[w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment), according to its GPLv2+ 
+licensing model.
+
+Modifications in this fork are copyright their respective authors and released under the same
+license. See [LICENSE](./LICENSE).
+
 The full history before that commit is the upstream author's work and is preserved in this
 repository — use `git log` and `git blame` for per-line authorship.
 

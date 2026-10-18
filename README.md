@@ -3,7 +3,7 @@
 > [!TIP]
 > Originally based on [display-adjustment](https://gitlab.com/w8jcik/display-adjustment) by Maciej Wójcik.
 >
-> Details: [CHANGELOG.md](./CHANGELOG.md).
+> Details: [CHANGELOG.md](./CHANGELOG.md), [LICENSE](./LICENSE).
 
 Offers sliders in Quick Settings to control the brightness and contrast of external displays
 through DDC/CI, one set per display, under the display name that Settings shows. Moving a slider
@@ -70,7 +70,14 @@ A new version shows up there once it passes review. To get the newest one before
 * [Test plans](./docs/testing.md)
 * [Run with mock displays](./docs/dev.md#mock-displays)
 
-# Thanks
+## Contributing
+
+...is welcome:
+  - Feedback on [extensions.gnome.org](https://extensions.gnome.org/extension/10707/multi-display-adjustment/)
+  - Issues
+  - Pull Requests
+
+### Thanks
 
 * [@hopsayer](https://github.com/hopsayer), for the inline sliders and much of what came with them
   in 1.4.0.
@@ -78,10 +85,19 @@ A new version shows up there once it passes review. To get the newest one before
   [contributors](https://github.com/samuelcecilio/multi-display-adjustment/graphs/contributors) for
   everyone whose code is in here.
 
-# License
+---
 
-This extension is distributed under the terms of the GNU General Public License, version 2 or later.
+_Like it? ⭐ Star this repo!_
 
-Copyright of the original work belongs to Maciej Wójcik and the contributors to
-[w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment). Modifications in this fork are
-copyright their respective authors and released under the same license. See [COPYING](./COPYING).
+<!--
+[![Github stars counter](https://img.shields.io/github/stars/samuelcecilio/multi-display-adjustment?style=social)](https://github.com/samuelcecilio/multi-display-adjustment)
+-->
+
+<!--
+[![Star History Chart](https://api.star-history.com/svg?repos=samuelcecilio/multi-display-adjustment&type=Date)](https://star-history.com/#samuelcecilio/multi-display-adjustment&Date)
+
+![GitHub all releases downloads counter](https://img.shields.io/github/downloads/samuelcecilio/multi-display-adjustment/total)
+
+-->
+
+
