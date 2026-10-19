@@ -1,10 +1,5 @@
 # Multi Display Adjustment GNOME shell extension
 
-> [!TIP]
-> Originally based on [display-adjustment](https://gitlab.com/w8jcik/display-adjustment) by Maciej Wójcik.
->
-> Details: [CHANGELOG.md](./CHANGELOG.md), [LICENSE](./LICENSE).
-
 Offers sliders in Quick Settings to control the brightness and contrast of external displays
 through DDC/CI, one set per display, under the display name that Settings shows. Moving a slider
 shows the level in the on-screen display of the screens it adjusts, as GNOME does for a laptop's
@@ -84,6 +79,12 @@ A new version shows up there once it passes review. To get the newest one before
 * Everyone who reports an issue or tries a change on their own displays. See the
   [contributors](https://github.com/samuelcecilio/multi-display-adjustment/graphs/contributors) for
   everyone whose code is in here.
+  
+## Related projects
+
+* [ddcutil](https://github.com/rockowitz/ddcutil) - fundamental backend.
+* [ddcutil-service](https://github.com/digitaltrails/ddcutil-service) - D-Bus adaptation for OS integration and thus responsiveness.
+* [w8jcik/display-adjustment](https://gitlab.com/w8jcik/display-adjustment) - GNOME extension which this project is [originally based on](./CHANGELOG.md).
 
 ---
 
