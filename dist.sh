@@ -29,14 +29,14 @@ MOCK_OUT_DIR=""
 trap 'rm -rf "$STAGE_DIR" "$MOCK_OUT_DIR"' EXIT
 
 cp -r "$ROOT_DIR/src/." "$STAGE_DIR/"
-cp "$ROOT_DIR/COPYING" "$STAGE_DIR/"
+cp "$ROOT_DIR/LICENSE" "$STAGE_DIR/"
 rm -f "$STAGE_DIR/schemas/gschemas.compiled"
 
 # metadata.json, extension.js, prefs.js and stylesheet.css are picked up
 # automatically, and schemas/*.gschema.xml is compiled into the package.
 # Everything else, including the license, has to be listed.
 EXTRA_SOURCES=(
-    COPYING
+    LICENSE
     code-convenience.js
     ddcutil-service.js
     display-config-service.js
