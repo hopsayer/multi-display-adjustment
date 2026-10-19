@@ -13,9 +13,9 @@ Offers sliders in Quick Settings to control the brightness and contrast of exter
 
 ### 1. Installation of ddcutil-service
 
-* **Arch Linux** — `yay -S ddcutil-service`
-* **openSUSE** — `sudo zypper install ddcutil-service`
-* **Debian 12 and 13, Ubuntu 24.04 to 26.04** — unofficial `amd64` packages by Maciej Wójcik:
+* [**Arch Linux**](https://aur.archlinux.org/packages/ddcutil-service) — `yay -S ddcutil-service`
+* [**openSUSE**](https://software.opensuse.org/package/ddcutil-service) — `sudo zypper install ddcutil-service`
+* [**Debian 12 and 13, Ubuntu 24.04 to 26.04**](https://gitlab.com/w8jcik/ddcutil-service.deb#latest) — unofficial `amd64` packages by Maciej Wójcik:
 
   ```bash
   . /etc/os-release # Read distro-ver variables for next command. Equal to "source /etc/os-release".
@@ -46,13 +46,13 @@ the browser or with an app such as Extension Manager.
 A new version shows up there once it passes review. To get the newest one before that, see
 [Install from a release](./docs/installation.md#install-from-a-release).
 
-# See more
+## See more
 
-## Using
+### Using
 
 * [Configuring](./docs/configuring.md)
 
-## Troubleshooting
+### Troubleshooting
 
 * [Diagnosing issues](./docs/troubleshooting.md#diagnosing-issues)
 * [Known issues](./docs/troubleshooting.md#known-issues)
@@ -62,7 +62,7 @@ A new version shows up there once it passes review. To get the newest one before
 * [Test plans](./docs/testing.md)
 * [Run with mock displays](./docs/dev.md#mock-displays)
 
-## Contributing
+### Contributing
 
 ...is welcome:
 
@@ -71,12 +71,12 @@ A new version shows up there once it passes review. To get the newest one before
 * Issues
 * Pull Requests
 
-### Thanks
+#### Thanks
 
 * [@hopsayer](https://github.com/hopsayer), for the inline sliders and much of what came with them in 1.4.0.
 * Everyone who reports an issue or tries a change on their own displays. See the [contributors](https://github.com/samuelcecilio/multi-display-adjustment/graphs/contributors) for everyone whose code is in here.
 
-## Related projects
+### Related projects
 
 * [ddcutil](https://github.com/rockowitz/ddcutil) - fundamental backend.
 * [ddcutil-service](https://github.com/digitaltrails/ddcutil-service) - D-Bus adaptation for OS integration and thus responsiveness.
