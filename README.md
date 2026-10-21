@@ -65,6 +65,11 @@ A new version shows up there once it passes review. To get the newest one before
 * [Diagnosing issues](./docs/troubleshooting.md#diagnosing-issues)
 * [Known issues](./docs/troubleshooting.md#known-issues)
 
+### Testing
+
+* [Test plans](./docs/testing.md)
+* [Run with mock displays](./docs/dev.md#mock-displays)
+
 # Thanks
 
 * [@hopsayer](https://github.com/hopsayer), for the inline sliders and much of what came with them

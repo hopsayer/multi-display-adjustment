@@ -8,6 +8,9 @@ git clone git@github.com:samuelcecilio/multi-display-adjustment.git ~/Code/multi
 
 `make` on its own lists every target mentioned below.
 
+What to check by hand in a real session, before a release and when a new GNOME version comes, is in
+[testing.md](./testing.md).
+
 ## Getting the working tree into the shell
 
 There are two ways, and they cannot be combined. `make status` tells which one is in place.
